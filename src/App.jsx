@@ -10,6 +10,7 @@ import AdminDashboard from './components/AdminDashboard';
 export default function App() {
   const [selectedDestination, setSelectedDestination] = useState(null);
   const [isAdminOpen, setIsAdminOpen] = useState(false);
+  const [activeCategory, setActiveCategory] = useState('tours');
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', backgroundColor: 'var(--bg-primary)' }}>
@@ -18,8 +19,12 @@ export default function App() {
 
       {/* Main content elements */}
       <main style={{ flexGrow: 1 }}>
-        <Hero />
-        <Destinations onSelectDestination={(pkg) => setSelectedDestination(pkg)} />
+        <Hero activeTab={activeCategory} setActiveTab={setActiveCategory} />
+        <Destinations 
+          activeTab={activeCategory} 
+          setActiveTab={setActiveCategory} 
+          onSelectDestination={(pkg) => setSelectedDestination(pkg)} 
+        />
         <Features />
       </main>
 

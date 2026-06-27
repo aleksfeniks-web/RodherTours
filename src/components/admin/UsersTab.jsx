@@ -42,15 +42,17 @@ export default function UsersTab({ bookings }) {
       {/* Summary */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '16px' }}>
         {[
-          { label: 'Clientes Únicos',      value: users.length,  icon: '👥', color: '#6366f1', bg: 'rgba(99,102,241,0.08)' },
-          { label: 'Reservas en Total',    value: bookings.length, icon: '📋', color: '#0ea5e9', bg: 'rgba(14,165,233,0.08)' },
-          { label: 'Clientes Recurrentes', value: users.filter(u => u.bookings.length > 1).length, icon: '🔄', color: '#10b981', bg: 'rgba(16,185,129,0.08)' },
+          { label: 'Clientes Únicos',      value: users.length,  icon: 'fi fi-rs-users', color: '#6366f1', bg: 'rgba(99,102,241,0.08)' },
+          { label: 'Reservas en Total',    value: bookings.length, icon: 'fi fi-bs-book-alt', color: '#0ea5e9', bg: 'rgba(14,165,233,0.08)' },
+          { label: 'Clientes Recurrentes', value: users.filter(u => u.bookings.length > 1).length, icon: 'fi fi-rs-redo', color: '#10b981', bg: 'rgba(16,185,129,0.08)' },
         ].map((item, i) => (
           <div key={i} style={{
             padding: '18px 20px', borderRadius: '14px', background: item.bg,
             border: `1.5px solid ${item.color}22`, display: 'flex', gap: '14px', alignItems: 'center'
           }}>
-            <span style={{ fontSize: '1.8rem' }}>{item.icon}</span>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
+              <i className={item.icon} style={{ fontSize: '1.4rem', color: item.color, display: 'flex', alignItems: 'center' }}></i>
+            </div>
             <div>
               <div style={{ fontSize: '1.5rem', fontWeight: 800, color: item.color, lineHeight: 1 }}>{item.value}</div>
               <div style={{ fontSize: '0.75rem', color: '#64748b', fontWeight: 600, marginTop: '3px' }}>{item.label}</div>

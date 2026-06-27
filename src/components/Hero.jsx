@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { getItems } from '../firebaseService';
 
-export default function Hero() {
-  const [activeTab, setActiveTab] = useState('tours');
+export default function Hero({ activeTab: propActiveTab, setActiveTab: propSetActiveTab }) {
+  const [localActiveTab, setLocalActiveTab] = useState('tours');
+  const activeTab = propActiveTab || localActiveTab;
+  const setActiveTab = propSetActiveTab || setLocalActiveTab;
   const [formData, setFormData] = useState({
     origin: 'Ciudad de México (MEX)',
     destination: 'Tokio (NRT)',
@@ -269,10 +271,10 @@ export default function Hero() {
             flexWrap: 'wrap'
           }}>
             {[
-              { id: 'flights', label: 'Vuelos',         icon: '✈️' },
-              { id: 'hotels',  label: 'Hoteles',        icon: '🏨' },
-              { id: 'tours',   label: 'Tours',          icon: '🗺️' },
-              { id: 'cars',    label: 'Autos',          icon: '🚗' },
+              { id: 'flights', label: 'Vuelos',         icon: 'fi fi-rr-plane-alt' },
+              { id: 'hotels',  label: 'Hoteles',        icon: 'fi fi-rs-hotel' },
+              { id: 'tours',   label: 'Tours',          icon: 'fi fi-rs-map' },
+              { id: 'cars',    label: 'Autos',          icon: 'fi fi-rs-car-side' },
             ].map(tab => (
               <button
                 key={tab.id}
@@ -289,7 +291,7 @@ export default function Hero() {
                   fontSize: '0.88rem',
                   display: 'flex',
                   alignItems: 'center',
-                  gap: '6px',
+                  gap: '8px',
                   color: activeTab === tab.id ? 'rgb(var(--secondary-rgb))' : 'var(--text-muted)',
                   transition: 'var(--transition-fast)',
                   whiteSpace: 'nowrap',
@@ -298,7 +300,7 @@ export default function Hero() {
                   minWidth: '0'
                 }}
               >
-                <span style={{ fontSize: '1rem' }}>{tab.icon}</span>
+                <i className={tab.icon} style={{ fontSize: '1rem', display: 'flex', alignItems: 'center' }}></i>
                 <span className="search-tab-label">{tab.label}</span>
               </button>
             ))}

@@ -179,8 +179,10 @@ export default function AdminDashboard({ onClose }) {
             width: '56px', height: '56px', borderRadius: '14px',
             background: 'linear-gradient(135deg,#0ea5e9,#0284c7)',
             display: 'flex', alignItems: 'center', justifyContent: 'center',
-            margin: '0 auto 20px', fontSize: '1.5rem'
-          }}>🔐</div>
+            margin: '0 auto 20px'
+          }}>
+            <i className="fi fi-rs-lock" style={{ color: 'white', fontSize: '1.4rem', display: 'flex', alignItems: 'center' }}></i>
+          </div>
           <h3 style={{ fontSize: '1.4rem', fontWeight: 800, marginBottom: '6px' }}>Acceso Administrador</h3>
           <p style={{ color: '#64748b', fontSize: '0.84rem', marginBottom: '24px' }}>
             Ingresa la clave para acceder al panel de control de RodherTours.
@@ -226,13 +228,13 @@ export default function AdminDashboard({ onClose }) {
 
   // ─── Tab definitions ────────────────────────────────────────────────────────
   const TABS = [
-    { key: 'dashboard',    label: 'Dashboard',    icon: '📊' },
-    { key: 'sales',        label: 'Ventas',       icon: '💰' },
-    { key: 'users',        label: 'Usuarios',     icon: '👥' },
-    { key: 'reservations', label: 'Reservas',     icon: '📋' },
-    { key: 'inventory',    label: 'Inventario',   icon: '📦' },
-    { key: 'promotions',   label: 'Promociones',  icon: '🏷️' },
-    { key: 'firebase',     label: 'Firebase',     icon: '⚙️' },
+    { key: 'dashboard',    label: 'Dashboard',    icon: 'fi fi-rs-chart-pie' },
+    { key: 'sales',        label: 'Ventas',       icon: 'fi fi-rs-usd-circle' },
+    { key: 'users',        label: 'Usuarios',     icon: 'fi fi-rs-users' },
+    { key: 'reservations', label: 'Reservas',     icon: 'fi fi-bs-book-alt' },
+    { key: 'inventory',    label: 'Inventario',   icon: 'fi fi-rs-box' },
+    { key: 'promotions',   label: 'Promociones',  icon: 'fi fi-rs-ticket' },
+    { key: 'firebase',     label: 'Firebase',     icon: 'fi fi-rs-settings' },
   ];
 
   // ─── Dashboard Panel ────────────────────────────────────────────────────────
@@ -305,11 +307,11 @@ export default function AdminDashboard({ onClose }) {
                 color: activeTab === tab.key ? '#0ea5e9' : '#64748b',
                 fontWeight: activeTab === tab.key ? 700 : 500,
                 cursor: 'pointer', fontSize: '0.88rem', whiteSpace: 'nowrap',
-                display: 'flex', alignItems: 'center', gap: '7px',
+                display: 'flex', alignItems: 'center', gap: '8px',
                 transition: 'color 0.2s, border-color 0.2s'
               }}
             >
-              <span>{tab.icon}</span>
+              <i className={tab.icon} style={{ fontSize: '0.92rem', display: 'flex', alignItems: 'center' }}></i>
               {tab.label}
             </button>
           ))}

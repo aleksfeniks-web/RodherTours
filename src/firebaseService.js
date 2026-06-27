@@ -14,6 +14,7 @@ const INVENTORY_KEYS = {
   flights: "rodher_tours_flights_mock",
   hotels: "rodher_tours_hotels_mock",
   tours: "rodher_tours_tours_mock",
+  cars: "rodher_tours_cars_mock",
   promotions: "rodher_tours_promotions_mock",
 };
 
@@ -103,6 +104,13 @@ const DEFAULT_PROMOTIONS = [
   { id: 'P2', code: 'BIENVENIDO50', type: 'fixed', value: 50, label: '$50 USD de descuento directo', active: true },
 ];
 
+const DEFAULT_CARS = [
+  { id: 'C1', name: 'Toyota Corolla', type: 'Sedán Familiar', transmission: 'Automático', price: 45, image: '/images/car_card.png', availability: 5 },
+  { id: 'C2', name: 'Jeep Wrangler 4x4', type: 'SUV / Todo Terreno', transmission: 'Manual', price: 85, image: '/images/car_card.png', availability: 3 },
+  { id: 'C3', name: 'Tesla Model 3', type: 'Eléctrico Premium', transmission: 'Automático', price: 120, image: '/images/car_card.png', availability: 2 },
+  { id: 'C4', name: 'Hyundai H1 Minivan', type: 'Minivan Familiar', transmission: 'Automático', price: 70, image: '/images/car_card.png', availability: 4 },
+];
+
 // Helper to get item from local storage or pre-populate defaults
 const getMockData = (type) => {
   try {
@@ -115,6 +123,7 @@ const getMockData = (type) => {
     else if (type === 'flights') defaults = DEFAULT_FLIGHTS;
     else if (type === 'hotels') defaults = DEFAULT_HOTELS;
     else if (type === 'tours') defaults = DEFAULT_TOURS;
+    else if (type === 'cars') defaults = DEFAULT_CARS;
     else if (type === 'promotions') defaults = DEFAULT_PROMOTIONS;
 
     localStorage.setItem(INVENTORY_KEYS[type], JSON.stringify(defaults));
@@ -236,7 +245,157 @@ export const getBookings = async () => {
 const getMockBookings = () => {
   try {
     const data = localStorage.getItem(MOCK_STORAGE_KEY);
-    return data ? JSON.parse(data) : [];
+    if (data) return JSON.parse(data);
+
+    // Seed default simulated bookings
+    const defaultBookings = [
+      {
+        id: "RDH-X7B8N1",
+        clientName: "Alejandro Fernández",
+        clientEmail: "alejandro.f@gmail.com",
+        clientPhone: "5543210987",
+        destinationId: "tokyo",
+        destinationName: "Tokio y Kioto Mágico (Japón 🇯🇵)",
+        travelDate: "2026-10-12",
+        passengers: 2,
+        amountPaid: 200,
+        originalDownPayment: 100,
+        totalPrice: 3198,
+        paymentMethod: "Tarjeta (3 MSI)",
+        msiOption: "3",
+        status: "contacted",
+        paymentStatus: "paid",
+        createdAt: "2026-06-15T10:30:00.000Z"
+      },
+      {
+        id: "RDH-M9K2L4",
+        clientName: "Sofia Rodríguez",
+        clientEmail: "sofia.rod@outlook.com",
+        clientPhone: "8112345678",
+        destinationId: "bali",
+        destinationName: "Bali: Paraíso Tropical e Histórico (Indonesia 🇮🇩)",
+        travelDate: "2026-09-05",
+        passengers: 1,
+        amountPaid: 80,
+        originalDownPayment: 80,
+        totalPrice: 1299,
+        paymentMethod: "PayPal",
+        msiOption: "1",
+        status: "new",
+        paymentStatus: "paid",
+        createdAt: "2026-06-25T15:45:00.000Z"
+      },
+      {
+        id: "RDH-P3J9H0",
+        clientName: "Carlos Gómez",
+        clientEmail: "cgomez@yahoo.com",
+        clientPhone: "3398765432",
+        destinationId: "dubai",
+        destinationName: "Lujo del Desierto y Modernidad (Dubai, EAU 🇦🇪)",
+        travelDate: "2026-12-20",
+        passengers: 1,
+        amountPaid: 150,
+        originalDownPayment: 150,
+        totalPrice: 1999,
+        paymentMethod: "Transferencia SPEI",
+        msiOption: "1",
+        status: "new",
+        paymentStatus: "paid",
+        createdAt: "2026-06-26T09:15:00.000Z"
+      },
+      {
+        id: "RDH-D6F8S2",
+        clientName: "Mariana López",
+        clientEmail: "mariana.lopez@empresa.com",
+        clientPhone: "5511223344",
+        destinationId: "china",
+        destinationName: "Maravillas de China Antigua y Moderna (China 🇨🇳)",
+        travelDate: "2026-11-01",
+        passengers: 2,
+        amountPaid: 240,
+        originalDownPayment: 120,
+        totalPrice: 3798,
+        paymentMethod: "Tarjeta (6 MSI)",
+        msiOption: "6",
+        status: "contacted",
+        paymentStatus: "paid",
+        createdAt: "2026-06-10T14:20:00.000Z"
+      },
+      {
+        id: "RDH-B5V9X4",
+        clientName: "Roberto Sánchez",
+        clientEmail: "rober.sanchez@gmail.com",
+        clientPhone: "4423456789",
+        destinationId: "tokyo",
+        destinationName: "Tokio y Kioto Mágico (Japón 🇯🇵)",
+        travelDate: "2026-10-12",
+        passengers: 1,
+        amountPaid: 100,
+        originalDownPayment: 100,
+        totalPrice: 1599,
+        paymentMethod: "OXXO Pay",
+        msiOption: "1",
+        status: "cancelled",
+        paymentStatus: "paid",
+        createdAt: "2026-06-01T11:00:00.000Z"
+      },
+      {
+        id: "RDH-Q1W8E5",
+        clientName: "Alejandro Fernández",
+        clientEmail: "alejandro.f@gmail.com",
+        clientPhone: "5543210987",
+        destinationId: "bali",
+        destinationName: "Bali: Paraíso Tropical e Histórico (Indonesia 🇮🇩)",
+        travelDate: "2026-09-05",
+        passengers: 1,
+        amountPaid: 80,
+        originalDownPayment: 80,
+        totalPrice: 1299,
+        paymentMethod: "Tarjeta (1 exhibición)",
+        msiOption: "1",
+        status: "contacted",
+        paymentStatus: "paid",
+        createdAt: "2026-06-16T12:00:00.000Z"
+      },
+      {
+        id: "RDH-Z4X7C8",
+        clientName: "Elena Pérez",
+        clientEmail: "elena.perez@hotmail.com",
+        clientPhone: "5599887766",
+        destinationId: "dubai",
+        destinationName: "Lujo del Desierto y Modernidad (Dubai, EAU 🇦🇪)",
+        travelDate: "2027-01-15",
+        passengers: 2,
+        amountPaid: 300,
+        originalDownPayment: 150,
+        totalPrice: 3998,
+        paymentMethod: "Tarjeta (12 MSI)",
+        msiOption: "12",
+        status: "new",
+        paymentStatus: "paid",
+        createdAt: "2026-06-26T20:10:00.000Z"
+      },
+      {
+        id: "RDH-T7Y9U0",
+        clientName: "Juan Pérez",
+        clientEmail: "jperez@gmail.com",
+        clientPhone: "5566778899",
+        destinationId: "china",
+        destinationName: "Maravillas de China Antigua y Moderna (China 🇨🇳)",
+        travelDate: "2026-11-15",
+        passengers: 1,
+        amountPaid: 120,
+        originalDownPayment: 120,
+        totalPrice: 1899,
+        paymentMethod: "OXXO Pay",
+        msiOption: "1",
+        status: "contacted",
+        paymentStatus: "paid",
+        createdAt: "2026-06-05T08:30:00.000Z"
+      }
+    ];
+    localStorage.setItem(MOCK_STORAGE_KEY, JSON.stringify(defaultBookings));
+    return defaultBookings;
   } catch (e) {
     console.error("Error reading bookings from localStorage:", e);
     return [];

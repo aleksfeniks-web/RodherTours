@@ -18,7 +18,7 @@ const labelStyle = {
 };
 
 export default function InventoryTab() {
-  const [activeSubTab, setActiveSubTab] = useState('packages'); // 'packages' | 'flights' | 'hotels' | 'tours'
+  const [activeSubTab, setActiveSubTab] = useState('packages'); // 'packages' | 'flights' | 'hotels' | 'tours' | 'cars'
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
@@ -52,6 +52,8 @@ export default function InventoryTab() {
       initialItem = { name: '', destination: '', stars: 5, rate: 100 };
     } else if (activeSubTab === 'tours') {
       initialItem = { name: '', destination: '', duration: '1 Día', price: 50 };
+    } else if (activeSubTab === 'cars') {
+      initialItem = { name: '', type: 'Sedán', transmission: 'Automático', price: 45, image: '/images/car_card.png', availability: 5 };
     }
     setEditItem(initialItem);
     setIsEditing(true);
@@ -111,6 +113,7 @@ export default function InventoryTab() {
             { id: 'flights', label: '✈️ Vuelos' },
             { id: 'hotels', label: '🏨 Hoteles' },
             { id: 'tours', label: '🗺️ Tours' },
+            { id: 'cars', label: '🚗 Autos' },
           ].map(sub => (
             <button
               key={sub.id}
@@ -264,6 +267,35 @@ export default function InventoryTab() {
               </div>
             )}
 
+            {/* Cars Specific Fields */}
+            {activeSubTab === 'cars' && (
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '16px' }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={labelStyle}>Modelo / Nombre *</label>
+                  <input type="text" value={editItem.name} onChange={e => setEditItem({...editItem, name: e.target.value})} style={inputStyle} required />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={labelStyle}>Tipo de Auto *</label>
+                  <input type="text" placeholder="Ej. Sedán, SUV, Eléctrico" value={editItem.type} onChange={e => setEditItem({...editItem, type: e.target.value})} style={inputStyle} required />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={labelStyle}>Transmisión *</label>
+                  <select value={editItem.transmission} onChange={e => setEditItem({...editItem, transmission: e.target.value})} style={inputStyle} required>
+                    <option value="Automático">Automático</option>
+                    <option value="Manual">Manual</option>
+                  </select>
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={labelStyle}>Tarifa por Día (USD) *</label>
+                  <input type="number" value={editItem.price} onChange={e => setEditItem({...editItem, price: parseInt(e.target.value) || 0})} style={inputStyle} required />
+                </div>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                  <label style={labelStyle}>Disponibilidad (Autos) *</label>
+                  <input type="number" value={editItem.availability} onChange={e => setEditItem({...editItem, availability: parseInt(e.target.value) || 0})} style={inputStyle} required />
+                </div>
+              </div>
+            )}
+
             <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>
               <button type="submit" style={{
                 padding: '10px 24px', borderRadius: '8px', fontWeight: 700, fontSize: '0.85rem',
@@ -332,6 +364,16 @@ export default function InventoryTab() {
                     <th style={{ padding: '14px 18px', textAlign: 'center' }}>Acciones</th>
                   </>
                 )}
+                {activeSubTab === 'cars' && (
+                  <>
+                    <th style={{ padding: '14px 18px' }}>Nombre / Modelo</th>
+                    <th style={{ padding: '14px 18px' }}>Tipo</th>
+                    <th style={{ padding: '14px 18px' }}>Transmisión</th>
+                    <th style={{ padding: '14px 18px', textAlign: 'right' }}>Tarifa/Día</th>
+                    <th style={{ padding: '14px 18px', textAlign: 'center' }}>Dispo.</th>
+                    <th style={{ padding: '14px 18px', textAlign: 'center' }}>Acciones</th>
+                  </>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -369,6 +411,15 @@ export default function InventoryTab() {
                       <td style={{ padding: '14px 18px', color: '#64748b' }}>{item.destination}</td>
                       <td style={{ padding: '14px 18px', color: '#64748b' }}>{item.duration}</td>
                       <td style={{ padding: '14px 18px', textAlign: 'right', fontWeight: 700 }}>${item.price} USD</td>
+                    </>
+                  )}
+                  {activeSubTab === 'cars' && (
+                    <>
+                      <td style={{ padding: '14px 18px', fontWeight: 600 }}>{item.name}</td>
+                      <td style={{ padding: '14px 18px', color: '#64748b' }}>{item.type}</td>
+                      <td style={{ padding: '14px 18px', color: '#64748b' }}>{item.transmission}</td>
+                      <td style={{ padding: '14px 18px', textAlign: 'right', fontWeight: 700 }}>${item.price} USD</td>
+                      <td style={{ padding: '14px 18px', textAlign: 'center' }}>{item.availability}</td>
                     </>
                   )}
                   <td style={{ padding: '14px 18px', textAlign: 'center' }}>

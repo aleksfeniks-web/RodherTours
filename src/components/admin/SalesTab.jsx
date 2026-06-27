@@ -54,15 +54,17 @@ export default function SalesTab({ bookings }) {
       {/* Summary Banners */}
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '16px' }}>
         {[
-          { label: 'Total Ingresos',   value: `$${totalRev} USD`,  icon: '💰', color: '#10b981', bg: 'rgba(16,185,129,0.08)' },
-          { label: 'Reservas Pagadas', value: totalCount,           icon: '📋', color: '#0ea5e9', bg: 'rgba(14,165,233,0.08)' },
-          { label: 'Ticket Promedio',  value: totalCount > 0 ? `$${Math.round(totalRev / totalCount)} USD` : '—', icon: '📈', color: '#a855f7', bg: 'rgba(168,85,247,0.08)' },
+          { label: 'Total Ingresos',   value: `$${totalRev} USD`,  icon: 'fi fi-rs-usd-circle', color: '#10b981', bg: 'rgba(16,185,129,0.08)' },
+          { label: 'Reservas Pagadas', value: totalCount,           icon: 'fi fi-bs-book-alt', color: '#0ea5e9', bg: 'rgba(14,165,233,0.08)' },
+          { label: 'Ticket Promedio',  value: totalCount > 0 ? `$${Math.round(totalRev / totalCount)} USD` : '—', icon: 'fi fi-rs-stats', color: '#a855f7', bg: 'rgba(168,85,247,0.08)' },
         ].map((item, i) => (
           <div key={i} style={{
             padding: '20px', borderRadius: '14px', background: item.bg,
             border: `1.5px solid ${item.color}22`, display: 'flex', flexDirection: 'column', gap: '8px'
           }}>
-            <span style={{ fontSize: '1.4rem' }}>{item.icon}</span>
+            <div style={{ display: 'flex', alignItems: 'center', height: '24px' }}>
+              <i className={item.icon} style={{ fontSize: '1.3rem', color: item.color, display: 'flex', alignItems: 'center' }}></i>
+            </div>
             <span style={{ fontSize: '1.5rem', fontWeight: 800, color: item.color, lineHeight: 1 }}>{item.value}</span>
             <span style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 600 }}>{item.label}</span>
           </div>

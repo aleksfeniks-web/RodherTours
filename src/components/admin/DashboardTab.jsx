@@ -38,11 +38,11 @@ export default function DashboardTab({ bookings }) {
   const recent = [...bookings].slice(0, 5);
 
   const kpis = [
-    { label: 'Total Reservas',    value: total,             icon: '📋', color: '#0ea5e9', bg: 'rgba(14,165,233,0.08)' },
-    { label: 'Ingresos Cobrados', value: `$${totalRev} USD`, icon: '💰', color: '#10b981', bg: 'rgba(16,185,129,0.08)' },
-    { label: 'Sin Contactar',     value: newCount,           icon: '🔔', color: '#f59e0b', bg: 'rgba(245,158,11,0.08)' },
-    { label: 'Contactados',       value: contacted,          icon: '✅', color: '#6366f1', bg: 'rgba(99,102,241,0.08)' },
-    { label: 'Canceladas',        value: cancelled,          icon: '❌', color: '#ef4444', bg: 'rgba(239,68,68,0.08)'  },
+    { label: 'Total Reservas',    value: total,             icon: 'fi fi-bs-book-alt', color: '#0ea5e9', bg: 'rgba(14,165,233,0.08)' },
+    { label: 'Ingresos Cobrados', value: `$${totalRev} USD`, icon: 'fi fi-rs-usd-circle', color: '#10b981', bg: 'rgba(16,185,129,0.08)' },
+    { label: 'Sin Contactar',     value: newCount,           icon: 'fi fi-rr-bell', color: '#f59e0b', bg: 'rgba(245,158,11,0.08)' },
+    { label: 'Contactados',       value: contacted,          icon: 'fi fi-rr-check', color: '#6366f1', bg: 'rgba(99,102,241,0.08)' },
+    { label: 'Canceladas',        value: cancelled,          icon: 'fi fi-rr-cross-circle', color: '#ef4444', bg: 'rgba(239,68,68,0.08)'  },
   ];
 
   return (
@@ -60,7 +60,9 @@ export default function DashboardTab({ bookings }) {
             flexDirection: 'column',
             gap: '8px'
           }}>
-            <span style={{ fontSize: '1.6rem' }}>{kpi.icon}</span>
+            <div style={{ display: 'flex', alignItems: 'center', height: '32px' }}>
+              <i className={kpi.icon} style={{ fontSize: '1.4rem', color: kpi.color, display: 'flex', alignItems: 'center' }}></i>
+            </div>
             <span style={{ fontSize: '1.6rem', fontWeight: 800, color: kpi.color, lineHeight: 1 }}>{kpi.value}</span>
             <span style={{ fontSize: '0.78rem', color: '#64748b', fontWeight: 600 }}>{kpi.label}</span>
           </div>
