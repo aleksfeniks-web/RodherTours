@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { saveBooking } from '../firebaseService';
+import React, { useState, useEffect } from 'react';
+import { saveBooking, getItems } from '../firebaseService';
 
 export default function BookingModal({ destination, onClose }) {
   const [step, setStep] = useState(1);
@@ -20,6 +20,63 @@ export default function BookingModal({ destination, onClose }) {
   const [cardName, setCardName] = useState('');
   const [cardExpiry, setCardExpiry] = useState('');
   const [cardCvv, setCardCvv] = useState('');
+
+  // Promotions & MSI states
+  const [couponCode, setCouponCode] = useState('');
+  const [appliedPromo, setAppliedPromo] = useState(null);
+  const [promoError, setPromoError] = useState('');
+  const [promoSuccess, setPromoSuccess] = useState('');
+  const [msi, setMsi] = useState('1'); // '1' | '3' | '6' | '9' | '12'
+  const [promotions, setPromotions] = useState([]);
+
+  // Load promotions list
+  useEffect(() => {
+    const loadPromotions = async () => {
+      try {
+        const data = await getItems('promotions');
+        setPromotions(data || []);
+      } catch (err) {
+        console.error("Error loading promotions in modal:", err);
+      }
+    };
+    loadPromotions();
+  }, []);
+
+  // Compute dynamic prices based on applied coupon/promotion
+  const originalDownPayment = destination.downPayment;
+  const originalTotalPrice = destination.price * parseInt(passengers);
+
+  let discountAmount = 0;
+  if (appliedPromo) {
+    if (appliedPromo.type === 'percent') {
+      discountAmount = Math.round(originalDownPayment * (appliedPromo.value / 100));
+    } else if (appliedPromo.type === 'fixed') {
+      discountAmount = Math.min(appliedPromo.value, originalDownPayment);
+    }
+  }
+
+  const downPaymentFinal = Math.max(originalDownPayment - discountAmount, 0);
+  const totalPriceFinal = Math.max(originalTotalPrice - (appliedPromo?.type === 'percent' ? originalTotalPrice * (appliedPromo.value / 100) : (appliedPromo?.value || 0)), 0);
+
+  const handleApplyCoupon = (e) => {
+    e.preventDefault();
+    setPromoError('');
+    setPromoSuccess('');
+    
+    if (!couponCode) {
+      setPromoError('Ingresa un código de cupón.');
+      return;
+    }
+
+    const found = promotions.find(p => p.code.toUpperCase() === couponCode.trim().toUpperCase() && p.active);
+    if (found) {
+      setAppliedPromo(found);
+      setPromoSuccess(`¡Cupón aplicado! Descuento: ${found.type === 'percent' ? `${found.value}%` : `$${found.value} USD`}`);
+    } else {
+      setAppliedPromo(null);
+      setPromoError('Cupón inválido o expirado.');
+    }
+  };
 
   // Form Validation
   const handleNextStep = (e) => {
@@ -49,6 +106,17 @@ export default function BookingModal({ destination, onClose }) {
 
     setLoading(true);
 
+    let finalPaymentMethodName = '';
+    if (paymentMethod === 'card') {
+      finalPaymentMethodName = msi === '1' ? 'Tarjeta (1 exhibición)' : `Tarjeta (${msi} MSI)`;
+    } else if (paymentMethod === 'paypal') {
+      finalPaymentMethodName = 'PayPal';
+    } else if (paymentMethod === 'spei') {
+      finalPaymentMethodName = 'Transferencia SPEI';
+    } else {
+      finalPaymentMethodName = 'OXXO Pay';
+    }
+
     const bookingData = {
       clientName,
       clientPhone,
@@ -57,8 +125,12 @@ export default function BookingModal({ destination, onClose }) {
       passengers: parseInt(passengers),
       destinationId: destination.id,
       destinationName: `${destination.name} (${destination.country})`,
-      amountPaid: destination.downPayment,
-      paymentMethod: paymentMethod === 'card' ? 'Tarjeta' : paymentMethod === 'spei' ? 'Transferencia SPEI' : 'OXXO Pay'
+      amountPaid: downPaymentFinal,
+      originalDownPayment,
+      totalPrice: totalPriceFinal,
+      paymentMethod: finalPaymentMethodName,
+      msiOption: paymentMethod === 'card' ? msi : '1',
+      couponUsed: appliedPromo ? appliedPromo.code : null,
     };
 
     try {
@@ -279,6 +351,47 @@ export default function BookingModal({ destination, onClose }) {
           {/* STEP 2: DOWN PAYMENT CHECKOUT */}
           {step === 2 && (
             <form onSubmit={handlePaymentConfirm} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              
+              {/* Coupon input */}
+              <div style={{
+                background: '#f8fafc',
+                padding: '14px',
+                borderRadius: 'var(--radius-md)',
+                border: '1px solid #e2e8f0',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px'
+              }}>
+                <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)' }}>🔑 ¿Tienes un cupón de descuento?</label>
+                <div style={{ display: 'flex', gap: '8px' }}>
+                  <input
+                    type="text"
+                    placeholder="Código de cupón (ej. RODHER2026)"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+                    style={{ ...inputStyle, marginBottom: 0, flexGrow: 1 }}
+                  />
+                  <button
+                    type="button"
+                    onClick={handleApplyCoupon}
+                    style={{
+                      background: 'rgb(var(--secondary-rgb))',
+                      color: 'white',
+                      border: 'none',
+                      padding: '0 16px',
+                      borderRadius: 'var(--radius-sm)',
+                      fontWeight: 700,
+                      fontSize: '0.85rem',
+                      cursor: 'pointer'
+                    }}
+                  >
+                    Aplicar
+                  </button>
+                </div>
+                {promoError && <span style={{ fontSize: '0.75rem', color: '#ef4444', fontWeight: 600 }}>{promoError}</span>}
+                {promoSuccess && <span style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: 600 }}>{promoSuccess}</span>}
+              </div>
+
               {/* Order summary */}
               <div style={{
                 background: '#f8fafc',
@@ -302,10 +415,28 @@ export default function BookingModal({ destination, onClose }) {
                   <span style={{ color: 'var(--text-muted)' }}>Fecha:</span>
                   <strong>{travelDate}</strong>
                 </div>
+                <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                  <span style={{ color: 'var(--text-muted)' }}>Costo Total:</span>
+                  {appliedPromo ? (
+                    <span>
+                      <span style={{ textDecoration: 'line-through', marginRight: '6px', color: '#94a3b8' }}>${originalTotalPrice.toLocaleString()} USD</span>
+                      <strong style={{ color: 'var(--dark-bg)' }}>${totalPriceFinal.toLocaleString()} USD</strong>
+                    </span>
+                  ) : (
+                    <strong>${originalTotalPrice.toLocaleString()} USD</strong>
+                  )}
+                </div>
                 <hr style={{ border: 0, borderTop: '1px solid #e2e8f0', margin: '8px 0' }} />
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '1rem' }}>
-                  <span style={{ color: 'var(--text-muted)', fontWeight: 600 }}>Pago de Apartado:</span>
-                  <strong style={{ color: 'rgb(var(--accent-rgb))', fontSize: '1.2rem' }}>${destination.downPayment} USD</strong>
+                  <span style={{ color: 'var(--text-muted)', fontWeight: 600 }}>Monto del Apartado:</span>
+                  {appliedPromo ? (
+                    <span>
+                      <span style={{ textDecoration: 'line-through', marginRight: '6px', color: '#94a3b8' }}>${originalDownPayment} USD</span>
+                      <strong style={{ color: 'rgb(var(--accent-rgb))', fontSize: '1.2rem' }}>${downPaymentFinal} USD</strong>
+                    </span>
+                  ) : (
+                    <strong style={{ color: 'rgb(var(--accent-rgb))', fontSize: '1.2rem' }}>${originalDownPayment} USD</strong>
+                  )}
                 </div>
               </div>
 
@@ -314,11 +445,12 @@ export default function BookingModal({ destination, onClose }) {
                 <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)' }}>Método de Pago</label>
                 <div style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(3, 1fr)',
+                  gridTemplateColumns: 'repeat(4, 1fr)',
                   gap: '8px'
                 }}>
                   {[
                     { id: 'card', label: '💳 Tarjeta' },
+                    { id: 'paypal', label: '🅿️ PayPal' },
                     { id: 'spei', label: '🏦 SPEI' },
                     { id: 'oxxo', label: '🏪 OXXO' }
                   ].map(method => (
@@ -327,15 +459,19 @@ export default function BookingModal({ destination, onClose }) {
                       type="button"
                       onClick={() => setPaymentMethod(method.id)}
                       style={{
-                        padding: '10px 4px',
+                        padding: '10px 2px',
                         border: paymentMethod === method.id ? '2px solid rgb(var(--secondary-rgb))' : '1px solid #cbd5e1',
                         borderRadius: 'var(--radius-sm)',
                         background: paymentMethod === method.id ? 'rgba(14, 165, 233, 0.05)' : 'white',
                         fontWeight: 600,
-                        fontSize: '0.82rem',
+                        fontSize: '0.8rem',
                         cursor: 'pointer',
                         color: paymentMethod === method.id ? 'rgb(var(--secondary-rgb))' : 'var(--text-main)',
-                        transition: 'var(--transition-fast)'
+                        transition: 'var(--transition-fast)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        gap: '4px'
                       }}
                     >
                       {method.label}
@@ -388,7 +524,7 @@ export default function BookingModal({ destination, onClose }) {
                     </div>
                   </div>
 
-                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                   <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
                     <input 
                       type="text" 
                       required
@@ -437,6 +573,72 @@ export default function BookingModal({ destination, onClose }) {
                       style={inputStyle}
                     />
                   </div>
+
+                  {/* MSI Dropdown */}
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginTop: '4px' }}>
+                    <label style={{ fontSize: '0.8rem', fontWeight: 700, color: 'var(--text-muted)' }}>💸 Opciones de Meses Sin Intereses (MSI)</label>
+                    <select 
+                      value={msi} 
+                      onChange={(e) => setMsi(e.target.value)} 
+                      style={inputStyle}
+                    >
+                      <option value="1">1 pago de ${downPaymentFinal} USD (Sin mensualidades)</option>
+                      <option value="3">3 mensualidades de ${(downPaymentFinal / 3).toFixed(2)} USD/mes</option>
+                      <option value="6">6 mensualidades de ${(downPaymentFinal / 6).toFixed(2)} USD/mes</option>
+                      <option value="9">9 mensualidades de ${(downPaymentFinal / 9).toFixed(2)} USD/mes</option>
+                      <option value="12">12 mensualidades de ${(downPaymentFinal / 12).toFixed(2)} USD/mes</option>
+                    </select>
+                  </div>
+                </div>
+              )}
+
+              {paymentMethod === 'paypal' && (
+                <div className="animate-fade-in" style={{
+                  background: 'rgba(255, 196, 57, 0.05)',
+                  border: '1.5px solid rgba(255, 196, 57, 0.3)',
+                  padding: '20px',
+                  borderRadius: 'var(--radius-md)',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '12px',
+                  alignItems: 'center',
+                  textAlign: 'center'
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '1.25rem', fontWeight: 800, color: '#003087' }}>
+                    <span style={{ fontSize: '1.6rem' }}>🅿️</span> PayPal
+                  </div>
+                  <p style={{ fontSize: '0.82rem', color: 'var(--text-muted)', maxWidth: '340px' }}>
+                    Paga de forma rápida y segura con tu cuenta PayPal o con tarjetas de débito/crédito asociadas.
+                  </p>
+                  
+                  {/* PayPal checkout simulator button */}
+                  <div style={{
+                    background: '#ffc439',
+                    borderRadius: '24px',
+                    width: '100%',
+                    maxWidth: '280px',
+                    padding: '12px',
+                    fontWeight: 700,
+                    fontSize: '0.92rem',
+                    color: '#003087',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    gap: '6px',
+                    boxShadow: '0 4px 10px rgba(255,196,57,0.3)',
+                    cursor: 'pointer',
+                    userSelect: 'none',
+                    border: '1px solid #e5a91a'
+                  }}
+                  onClick={handlePaymentConfirm}
+                  >
+                    <span>PayWith</span>
+                    <strong style={{ fontStyle: 'italic', fontWeight: 900, fontSize: '1rem', color: '#0079C1' }}>Pay</strong>
+                    <strong style={{ fontStyle: 'italic', fontWeight: 900, fontSize: '1rem', color: '#00457C' }}>Pal</strong>
+                  </div>
+                  <span style={{ fontSize: '0.73rem', color: 'var(--text-light)' }}>
+                    Serás redirigido de forma segura a PayPal para autorizar tu apartado de <strong>${downPaymentFinal} USD</strong>.
+                  </span>
                 </div>
               )}
 

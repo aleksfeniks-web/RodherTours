@@ -147,7 +147,10 @@ export default function ReservationsTab({ bookings, onBookingsChange }) {
                   </td>
                   <td style={tdStyle}>
                     <strong style={{ color: '#10b981', fontSize: '0.95rem' }}>${b.amountPaid} USD</strong>
-                    <div style={{ fontSize: '0.7rem', color: '#94a3b8' }}>{b.paymentMethod || 'Tarjeta'}</div>
+                    <div style={{ fontSize: '0.7rem', color: '#94a3b8', display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                      <span>{b.paymentMethod || 'Tarjeta'}</span>
+                      {b.couponUsed && <span style={{ color: '#0ea5e9', fontWeight: 700 }}>🎟️ Cupón: {b.couponUsed}</span>}
+                    </div>
                   </td>
                   <td style={tdStyle}>
                     <select

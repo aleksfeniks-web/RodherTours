@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import ScrollReveal from './ScrollReveal';
 import { useStaggeredReveal } from '../hooks/useScrollReveal';
+import { getItems } from '../firebaseService';
 
-const packages = [
+const STATIC_PACKAGES = [
   {
     id: 'tokyo',
     name: 'Tokio y Kioto Mágico',
@@ -62,6 +63,27 @@ const packages = [
 ];
 
 export default function Destinations({ onSelectDestination }) {
+  const [packages, setPackages] = useState(STATIC_PACKAGES);
+
+  useEffect(() => {
+    const loadPackages = async () => {
+      try {
+        const data = await getItems('packages');
+        if (data && data.length > 0) {
+          setPackages(data);
+        }
+      } catch (err) {
+        console.error("Error loading packages in Destinations:", err);
+      }
+    };
+    loadPackages();
+    
+    // Add custom event listener for local inventory updates
+    const handleInventoryUpdate = () => loadPackages();
+    window.addEventListener('inventoryUpdated', handleInventoryUpdate);
+    return () => window.removeEventListener('inventoryUpdated', handleInventoryUpdate);
+  }, []);
+
   const { containerRef, getItemStyle } = useStaggeredReveal(packages.length, { staggerMs: 130, threshold: 0.06 });
 
   return (
@@ -259,4 +281,4 @@ const styleHook = (
     }
   `}</style>
 );
-export { packages };
+export { STATIC_PACKAGES as packages };

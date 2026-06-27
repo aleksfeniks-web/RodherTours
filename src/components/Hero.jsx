@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { getItems } from '../firebaseService';
 
 export default function Hero() {
   const [activeTab, setActiveTab] = useState('tours');
@@ -8,6 +9,31 @@ export default function Hero() {
     departure: '2026-10-12',
     passengers: '2 Adultos'
   });
+  
+  const [packages, setPackages] = useState([]);
+  const [currentPkgIndex, setCurrentPkgIndex] = useState(0);
+
+  // Load packages dynamically for rotating card
+  useEffect(() => {
+    const loadPkgs = async () => {
+      try {
+        const data = await getItems('packages');
+        setPackages(data || []);
+      } catch (err) {
+        console.error("Error loading packages for Hero rotation:", err);
+      }
+    };
+    loadPkgs();
+  }, []);
+
+  // Set rotation timer
+  useEffect(() => {
+    if (packages.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentPkgIndex(prev => (prev + 1) % packages.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [packages]);
 
   // Parallax background on scroll
   const heroRef = useRef(null);
@@ -176,34 +202,51 @@ export default function Hero() {
             justifyContent: 'flex-end',
             alignItems: 'center'
           }}>
-            <div className="glass animate-fade-in hero-floating-card" style={{
-              padding: '16px',
-              borderRadius: 'var(--radius-lg)',
-              maxWidth: '300px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '14px',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-              boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
-              color: 'var(--text-main)'
-            }}>
-              <img 
-                src="/images/tokyo.png" 
-                alt="Tokyo Feature" 
-                style={{ width: '70px', height: '70px', borderRadius: 'var(--radius-md)', objectFit: 'cover' }}
-              />
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <span style={{ fontWeight: 700, fontSize: '0.95rem' }}>Tokio, Japón 🗼</span>
-                <div style={{ display: 'flex', gap: '2px' }}>
-                  {[1, 2, 3, 4, 5].map(star => (
-                    <svg key={star} width="12" height="12" viewBox="0 0 24 24" fill="#f59e0b" stroke="none">
-                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
-                    </svg>
-                  ))}
+            {packages.length > 0 && (
+              <div 
+                key={currentPkgIndex} 
+                className="glass animate-fade-in hero-floating-card" 
+                style={{
+                  padding: '16px',
+                  borderRadius: 'var(--radius-lg)',
+                  maxWidth: '300px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '14px',
+                  border: '1px solid rgba(255, 255, 255, 0.2)',
+                  boxShadow: '0 20px 40px rgba(0,0,0,0.3)',
+                  color: 'var(--text-main)',
+                  cursor: 'pointer'
+                }}
+                onClick={() => {
+                  const destinationsSection = document.getElementById('destinos');
+                  if (destinationsSection) {
+                    destinationsSection.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
+              >
+                <img 
+                  src={packages[currentPkgIndex].image || '/images/tokyo.png'} 
+                  alt={packages[currentPkgIndex].name} 
+                  style={{ width: '70px', height: '70px', borderRadius: 'var(--radius-md)', objectFit: 'cover' }}
+                />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                  <span style={{ fontWeight: 700, fontSize: '0.92rem' }}>
+                    {packages[currentPkgIndex].name.split(':')[0]} {packages[currentPkgIndex].country.includes(' ') ? packages[currentPkgIndex].country.substring(packages[currentPkgIndex].country.indexOf(' ')) : ''}
+                  </span>
+                  <div style={{ display: 'flex', gap: '2px' }}>
+                    {Array.from({ length: Math.round(packages[currentPkgIndex].rating || 5) }).map((_, star) => (
+                      <svg key={star} width="12" height="12" viewBox="0 0 24 24" fill="#f59e0b" stroke="none">
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+                      </svg>
+                    ))}
+                  </div>
+                  <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>
+                    Desde <strong style={{ color: 'rgb(var(--accent-rgb))' }}>${packages[currentPkgIndex].price} USD</strong>
+                  </span>
                 </div>
-                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Desde <strong style={{ color: 'rgb(var(--accent-rgb))' }}>$1,599 USD</strong></span>
               </div>
-            </div>
+            )}
           </div>
         </div>
 

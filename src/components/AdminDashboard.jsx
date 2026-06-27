@@ -10,6 +10,8 @@ import DashboardTab from './admin/DashboardTab';
 import SalesTab     from './admin/SalesTab';
 import UsersTab     from './admin/UsersTab';
 import ReservationsTab from './admin/ReservationsTab';
+import InventoryTab from './admin/InventoryTab';
+import PromotionsTab from './admin/PromotionsTab';
 
 // ─── Firebase Config Form ─────────────────────────────────────────────────────
 function FirebaseConfigTab() {
@@ -224,11 +226,13 @@ export default function AdminDashboard({ onClose }) {
 
   // ─── Tab definitions ────────────────────────────────────────────────────────
   const TABS = [
-    { key: 'dashboard',    label: 'Dashboard',  icon: '📊' },
-    { key: 'sales',        label: 'Ventas',     icon: '💰' },
-    { key: 'users',        label: 'Usuarios',   icon: '👥' },
-    { key: 'reservations', label: 'Reservas',   icon: '📋' },
-    { key: 'firebase',     label: 'Firebase',   icon: '⚙️' },
+    { key: 'dashboard',    label: 'Dashboard',    icon: '📊' },
+    { key: 'sales',        label: 'Ventas',       icon: '💰' },
+    { key: 'users',        label: 'Usuarios',     icon: '👥' },
+    { key: 'reservations', label: 'Reservas',     icon: '📋' },
+    { key: 'inventory',    label: 'Inventario',   icon: '📦' },
+    { key: 'promotions',   label: 'Promociones',  icon: '🏷️' },
+    { key: 'firebase',     label: 'Firebase',     icon: '⚙️' },
   ];
 
   // ─── Dashboard Panel ────────────────────────────────────────────────────────
@@ -331,6 +335,8 @@ export default function AdminDashboard({ onClose }) {
                   onBookingsChange={setBookings}
                 />
               )}
+              {activeTab === 'inventory'    && <InventoryTab />}
+              {activeTab === 'promotions'   && <PromotionsTab />}
               {activeTab === 'firebase'     && <FirebaseConfigTab />}
             </>
           )}
