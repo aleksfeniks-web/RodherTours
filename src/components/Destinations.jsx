@@ -118,15 +118,7 @@ export default function Destinations({ activeTab: propActiveTab, setActiveTab: p
             flexDirection: 'column',
             gap: '12px'
           }}>
-            <span style={{
-              fontSize: '0.85rem',
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '2px',
-              color: 'rgb(var(--secondary-rgb))'
-            }}>
-              Nuestro Catálogo de Inventario
-            </span>
+
             <h2 style={{
               fontSize: '2.5rem',
               fontWeight: 800,

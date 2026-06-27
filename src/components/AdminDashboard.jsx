@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  getBookings,
-  getSavedFirebaseConfig,
-  saveFirebaseConfig,
-  clearFirebaseConfig,
-  isFirebaseConnected
-} from '../firebaseService';
+import { getBookings } from '../firebaseService';
 import DashboardTab from './admin/DashboardTab';
 import SalesTab     from './admin/SalesTab';
 import UsersTab     from './admin/UsersTab';
@@ -13,117 +7,7 @@ import ReservationsTab from './admin/ReservationsTab';
 import InventoryTab from './admin/InventoryTab';
 import PromotionsTab from './admin/PromotionsTab';
 
-// ─── Firebase Config Form ─────────────────────────────────────────────────────
-function FirebaseConfigTab() {
-  const [apiKey, setApiKey]                     = useState('');
-  const [authDomain, setAuthDomain]             = useState('');
-  const [projectId, setProjectId]               = useState('');
-  const [storageBucket, setStorageBucket]       = useState('');
-  const [messagingSenderId, setMessagingSenderId] = useState('');
-  const [appId, setAppId]                       = useState('');
 
-  useEffect(() => {
-    const saved = getSavedFirebaseConfig();
-    if (saved) {
-      setApiKey(saved.apiKey || '');
-      setAuthDomain(saved.authDomain || '');
-      setProjectId(saved.projectId || '');
-      setStorageBucket(saved.storageBucket || '');
-      setMessagingSenderId(saved.messagingSenderId || '');
-      setAppId(saved.appId || '');
-    }
-  }, []);
-
-  const handleSave = (e) => {
-    e.preventDefault();
-    if (!apiKey || !projectId || !appId) {
-      alert('API Key, Project ID y App ID son campos mínimos obligatorios.');
-      return;
-    }
-    saveFirebaseConfig({ apiKey, authDomain, projectId, storageBucket, messagingSenderId, appId });
-    alert('Configuración guardada. Recargando...');
-  };
-
-  const handleClear = () => {
-    if (window.confirm('¿Eliminar la configuración de Firebase y volver a modo LocalStorage?')) {
-      clearFirebaseConfig();
-    }
-  };
-
-  return (
-    <div style={{ maxWidth: '640px', display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      <div>
-        <h3 style={{ fontSize: '1.15rem', fontWeight: 700, marginBottom: '8px' }}>Integrar Firebase Firestore</h3>
-        <p style={{ color: '#64748b', fontSize: '0.88rem', lineHeight: 1.6 }}>
-          Conecta la app a tu propia base de datos Firebase. Sin configuración, los datos se guardan en <strong>LocalStorage</strong> (solo en este dispositivo).
-        </p>
-      </div>
-
-      {/* Status indicator */}
-      <div style={{
-        display: 'flex', alignItems: 'center', gap: '10px', padding: '12px 16px',
-        borderRadius: '10px',
-        background: isFirebaseConnected() ? 'rgba(16,185,129,0.08)' : 'rgba(245,158,11,0.08)',
-        border: `1.5px solid ${isFirebaseConnected() ? 'rgba(16,185,129,0.3)' : 'rgba(245,158,11,0.3)'}`,
-        fontSize: '0.85rem', fontWeight: 600,
-        color: isFirebaseConnected() ? '#047857' : '#92400e',
-      }}>
-        <span style={{
-          width: '9px', height: '9px', borderRadius: '50%',
-          background: isFirebaseConnected() ? '#10b981' : '#f59e0b', flexShrink: 0
-        }} />
-        {isFirebaseConnected()
-          ? '✓ Conectado a Firebase Firestore — los datos se sincronizan en la nube.'
-          : '⚠️ Modo LocalStorage — configura Firebase para guardar datos en la nube.'}
-      </div>
-
-      <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-          {[
-            { label: 'API Key *',    val: apiKey,    set: setApiKey },
-            { label: 'Project ID *', val: projectId, set: setProjectId },
-            { label: 'Auth Domain',  val: authDomain, set: setAuthDomain },
-            { label: 'Storage Bucket', val: storageBucket, set: setStorageBucket },
-            { label: 'Messaging Sender ID', val: messagingSenderId, set: setMessagingSenderId },
-            { label: 'App ID *',     val: appId,     set: setAppId },
-          ].map(({ label, val, set }) => (
-            <div key={label} style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <label style={{ fontSize: '0.78rem', fontWeight: 700, color: '#64748b' }}>{label}</label>
-              <input
-                type="text"
-                value={val}
-                onChange={e => set(e.target.value)}
-                style={{
-                  padding: '10px 14px', borderRadius: '8px',
-                  border: '1.5px solid #cbd5e1', fontSize: '0.88rem', outline: 'none', width: '100%'
-                }}
-              />
-            </div>
-          ))}
-        </div>
-
-        <div style={{ display: 'flex', gap: '12px', marginTop: '8px' }}>
-          <button type="submit" style={{
-            padding: '11px 24px', borderRadius: '10px', fontWeight: 700, fontSize: '0.9rem',
-            background: 'linear-gradient(135deg, #0ea5e9, #0284c7)', color: 'white',
-            border: 'none', cursor: 'pointer'
-          }}>
-            Guardar y Conectar
-          </button>
-          {getSavedFirebaseConfig() && (
-            <button type="button" onClick={handleClear} style={{
-              padding: '11px 24px', borderRadius: '10px', fontWeight: 700, fontSize: '0.9rem',
-              background: 'transparent', color: '#ef4444',
-              border: '1.5px solid #ef4444', cursor: 'pointer'
-            }}>
-              Eliminar Conexión
-            </button>
-          )}
-        </div>
-      </form>
-    </div>
-  );
-}
 
 // ─── Main AdminDashboard ──────────────────────────────────────────────────────
 export default function AdminDashboard({ onClose }) {
@@ -234,7 +118,6 @@ export default function AdminDashboard({ onClose }) {
     { key: 'reservations', label: 'Reservas',     icon: 'fi fi-bs-book-alt' },
     { key: 'inventory',    label: 'Inventario',   icon: 'fi fi-rs-box' },
     { key: 'promotions',   label: 'Promociones',  icon: 'fi fi-rs-ticket' },
-    { key: 'firebase',     label: 'Firebase',     icon: 'fi fi-rs-settings' },
   ];
 
   // ─── Dashboard Panel ────────────────────────────────────────────────────────
@@ -265,13 +148,6 @@ export default function AdminDashboard({ onClose }) {
             <h2 style={{ fontSize: '1.25rem', fontWeight: 800, letterSpacing: '-0.5px' }}>
               🗺️ RodherTours — Panel de Control
             </h2>
-            <span style={{ fontSize: '0.78rem', opacity: 0.6, display: 'flex', alignItems: 'center', gap: '6px', marginTop: '2px' }}>
-              <span style={{
-                width: '7px', height: '7px', borderRadius: '50%',
-                background: isFirebaseConnected() ? '#10b981' : '#f59e0b'
-              }} />
-              {isFirebaseConnected() ? 'Firebase Firestore conectado' : 'Modo LocalStorage'}
-            </span>
           </div>
           <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
             <button onClick={loadBookings} disabled={loading} style={{
@@ -339,7 +215,6 @@ export default function AdminDashboard({ onClose }) {
               )}
               {activeTab === 'inventory'    && <InventoryTab />}
               {activeTab === 'promotions'   && <PromotionsTab />}
-              {activeTab === 'firebase'     && <FirebaseConfigTab />}
             </>
           )}
         </div>
