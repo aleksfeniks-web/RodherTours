@@ -340,6 +340,45 @@ export default function Destinations({ activeTab: propActiveTab, setActiveTab: p
                       {displayPkg.highlights}
                     </p>
 
+                    {displayPkg.type === 'package' && (
+                      <div style={{ 
+                        marginTop: '10px',
+                        background: '#f8fafc',
+                        padding: '12px 16px',
+                        borderRadius: 'var(--radius-md)',
+                        border: '1px solid #e2e8f0',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        gap: '6px'
+                      }}>
+                        <span style={{ fontSize: '0.72rem', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '2px' }}>
+                          Qué Incluye:
+                        </span>
+                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: 'var(--text-main)', fontWeight: 500 }}>
+                            <i className="fi fi-rr-plane-alt" style={{ color: 'rgb(var(--secondary-rgb))', fontSize: '0.85rem', display: 'flex', alignItems: 'center' }}></i>
+                            <span>Vuelo redondo</span>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: 'var(--text-main)', fontWeight: 500 }}>
+                            <i className="fi fi-rs-hotel" style={{ color: 'rgb(var(--secondary-rgb))', fontSize: '0.85rem', display: 'flex', alignItems: 'center' }}></i>
+                            <span>Hospedaje</span>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: 'var(--text-main)', fontWeight: 500 }}>
+                            <i className="fi fi-rs-map" style={{ color: 'rgb(var(--secondary-rgb))', fontSize: '0.85rem', display: 'flex', alignItems: 'center' }}></i>
+                            <span>Tours</span>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: 'var(--text-main)', fontWeight: 500 }}>
+                            <i className="fi fi-rs-car-side" style={{ color: 'rgb(var(--secondary-rgb))', fontSize: '0.85rem', display: 'flex', alignItems: 'center' }}></i>
+                            <span>Transporte</span>
+                          </div>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '0.78rem', color: 'var(--text-main)', fontWeight: 500, gridColumn: 'span 2' }}>
+                            <i className="fi fi-rs-users" style={{ color: 'rgb(var(--secondary-rgb))', fontSize: '0.85rem', display: 'flex', alignItems: 'center' }}></i>
+                            <span>Guía Certificado</span>
+                          </div>
+                        </div>
+                      </div>
+                    )}
+
                     <hr style={{ border: 0, borderTop: '1px solid #e2e8f0', margin: '8px 0' }} />
 
                     <div style={{
@@ -364,19 +403,66 @@ export default function Destinations({ activeTab: propActiveTab, setActiveTab: p
                       </div>
                     </div>
 
-                    <button 
-                      onClick={() => onSelectDestination(displayPkg)}
-                      className="btn btn-accent" 
-                      style={{
-                        width: '100%',
-                        padding: '12px',
-                        borderRadius: 'var(--radius-md)',
-                        marginTop: '8px',
-                        fontSize: '0.95rem'
-                      }}
-                    >
-                      {displayPkg.type === 'flight' ? 'Reservar y Apartar Vuelo' : displayPkg.type === 'hotel' ? 'Reservar y Apartar Habitación' : displayPkg.type === 'car' ? 'Reservar y Apartar Auto' : 'Reservar y Apartar Lugar'}
-                    </button>
+                    {displayPkg.type === 'package' ? (
+                      <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>
+                        <button 
+                          onClick={() => onSelectDestination(displayPkg)}
+                          className="btn btn-accent" 
+                          style={{
+                            flex: 1,
+                            padding: '12px 8px',
+                            borderRadius: 'var(--radius-md)',
+                            fontSize: '0.88rem',
+                            fontWeight: 700,
+                            whiteSpace: 'nowrap'
+                          }}
+                        >
+                          Apartar Lugar
+                        </button>
+                        <a 
+                          href={`https://wa.me/525587654321?text=${encodeURIComponent(`Hola, me interesa cotizar el tour a ${displayPkg.name} (${displayPkg.country}). ¿Me podrían brindar más información? 😊`)}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="btn"
+                          style={{
+                            flex: 1,
+                            background: '#25D366',
+                            color: 'white',
+                            padding: '12px 8px',
+                            borderRadius: 'var(--radius-md)',
+                            fontSize: '0.88rem',
+                            fontWeight: 700,
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: '6px',
+                            boxShadow: '0 4px 10px rgba(37, 211, 102, 0.25)',
+                            textDecoration: 'none',
+                            whiteSpace: 'nowrap',
+                            transition: 'var(--transition-fast)'
+                          }}
+                        >
+                          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
+                            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.316 1.592 5.43 0 9.849-4.417 9.851-9.85.002-5.43-4.415-9.849-9.851-9.849-5.431 0-9.85 4.417-9.852 9.85-.001 1.954.512 3.86 1.488 5.567l-.999 3.647 3.747-.981zm12.006-7.531c-.328-.164-1.942-.959-2.242-1.069-.3-.11-.518-.165-.736.164-.219.328-.847 1.069-1.037 1.288-.19.219-.38.246-.708.082-.328-.164-1.386-.511-2.64-1.629-.976-.87-1.635-1.946-1.826-2.274-.19-.328-.02-.505.144-.668.148-.147.328-.383.493-.574.164-.191.219-.328.328-.546.11-.219.055-.41-.027-.574-.082-.164-.736-1.777-1.009-2.433-.267-.641-.539-.553-.736-.563-.19-.01-.409-.012-.628-.012-.218 0-.573.082-.873.41-.3.328-1.147 1.12-1.147 2.732 0 1.612 1.174 3.17 1.338 3.389.164.218 2.312 3.53 5.599 4.95 1.666.721 2.502.936 3.424.811.895-.121 2.766-1.131 3.153-2.227.387-1.096.387-2.031.272-2.227-.113-.195-.411-.304-.739-.469z"/>
+                          </svg>
+                          Cotizar
+                        </a>
+                      </div>
+                    ) : (
+                      <button 
+                        onClick={() => onSelectDestination(displayPkg)}
+                        className="btn btn-accent" 
+                        style={{
+                          width: '100%',
+                          padding: '12px',
+                          borderRadius: 'var(--radius-md)',
+                          marginTop: '8px',
+                          fontSize: '0.95rem'
+                        }}
+                      >
+                        {displayPkg.type === 'flight' ? 'Reservar y Apartar Vuelo' : displayPkg.type === 'hotel' ? 'Reservar y Apartar Habitación' : displayPkg.type === 'car' ? 'Reservar y Apartar Auto' : 'Reservar y Apartar Lugar'}
+                      </button>
+                    )}
                   </div>
                 </div>
               );
