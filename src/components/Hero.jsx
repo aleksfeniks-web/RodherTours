@@ -208,7 +208,7 @@ export default function Hero() {
         </div>
 
         {/* BOTTOM: FLOATING SEARCH WIDGET */}
-        <div className="glass animate-fade-in-up" style={{
+        <div className="glass animate-fade-in-up search-widget" style={{
           marginTop: '64px',
           borderRadius: 'var(--radius-xl)',
           padding: '24px',
@@ -217,51 +217,52 @@ export default function Hero() {
           color: 'var(--text-main)'
         }}>
           {/* Tab Selector */}
-          <div style={{
+          <div className="search-tabs" style={{
             display: 'flex',
-            gap: '8px',
+            gap: '6px',
             marginBottom: '20px',
             borderBottom: '1px solid rgba(0,0,0,0.06)',
-            paddingBottom: '12px'
+            paddingBottom: '12px',
+            flexWrap: 'wrap'
           }}>
             {[
-              { id: 'flights', label: 'Vuelos', icon: '✈️' },
-              { id: 'hotels', label: 'Hoteles', icon: '🏨' },
-              { id: 'tours', label: 'Tours Especiales', icon: '🗺️' },
-              { id: 'cars', label: 'Autos', icon: '🚗' },
+              { id: 'flights', label: 'Vuelos',         icon: '✈️' },
+              { id: 'hotels',  label: 'Hoteles',        icon: '🏨' },
+              { id: 'tours',   label: 'Tours',          icon: '🗺️' },
+              { id: 'cars',    label: 'Autos',          icon: '🚗' },
             ].map(tab => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
+                className={`search-tab-btn${activeTab === tab.id ? ' search-tab-active' : ''}`}
                 style={{
-                  background: activeTab === tab.id ? 'rgba(14, 165, 233, 0.1)' : 'transparent',
-                  border: 'none',
+                  background: activeTab === tab.id ? 'rgba(14, 165, 233, 0.12)' : 'transparent',
+                  border: activeTab === tab.id ? '1.5px solid rgba(14,165,233,0.25)' : '1.5px solid transparent',
                   outline: 'none',
-                  padding: '8px 18px',
+                  padding: '8px 16px',
                   borderRadius: 'var(--radius-sm)',
                   cursor: 'pointer',
                   fontWeight: 600,
-                  fontSize: '0.9rem',
+                  fontSize: '0.88rem',
                   display: 'flex',
                   alignItems: 'center',
                   gap: '6px',
                   color: activeTab === tab.id ? 'rgb(var(--secondary-rgb))' : 'var(--text-muted)',
-                  transition: 'var(--transition-fast)'
+                  transition: 'var(--transition-fast)',
+                  whiteSpace: 'nowrap',
+                  flex: '1 1 auto',
+                  justifyContent: 'center',
+                  minWidth: '0'
                 }}
               >
-                <span>{tab.icon}</span>
-                {tab.label}
+                <span style={{ fontSize: '1rem' }}>{tab.icon}</span>
+                <span className="search-tab-label">{tab.label}</span>
               </button>
             ))}
           </div>
 
           {/* Search Fields Form */}
-          <form onSubmit={handleSearch} style={{
-            display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr)) 160px',
-            gap: '16px',
-            alignItems: 'end'
-          }}>
+          <form onSubmit={handleSearch} className="search-form">
             <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               <label style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)' }}>Origen</label>
               <input 
@@ -275,7 +276,8 @@ export default function Hero() {
                   background: 'white',
                   fontSize: '0.95rem',
                   fontWeight: 500,
-                  outline: 'none'
+                  outline: 'none',
+                  width: '100%'
                 }}
               />
             </div>
@@ -293,7 +295,8 @@ export default function Hero() {
                   background: 'white',
                   fontSize: '0.95rem',
                   fontWeight: 500,
-                  outline: 'none'
+                  outline: 'none',
+                  width: '100%'
                 }}
               />
             </div>
@@ -311,7 +314,8 @@ export default function Hero() {
                   background: 'white',
                   fontSize: '0.95rem',
                   fontWeight: 500,
-                  outline: 'none'
+                  outline: 'none',
+                  width: '100%'
                 }}
               />
             </div>
@@ -330,6 +334,7 @@ export default function Hero() {
                   fontWeight: 500,
                   outline: 'none',
                   appearance: 'none',
+                  width: '100%',
                   backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
                   backgroundRepeat: 'no-repeat',
                   backgroundPosition: 'right 14px center',
@@ -343,7 +348,7 @@ export default function Hero() {
               </select>
             </div>
 
-            <button type="submit" className="btn btn-primary" style={{ padding: '14px', borderRadius: 'var(--radius-md)', width: '100%', height: '48px' }}>
+            <button type="submit" className="btn btn-primary search-submit-btn" style={{ padding: '14px', borderRadius: 'var(--radius-md)', width: '100%', height: '48px' }}>
               Buscar Paquete
             </button>
           </form>
@@ -352,17 +357,90 @@ export default function Hero() {
       </div>
 
       <style>{`
+        /* Hero badge hidden on tablet/mobile */
         @media (max-width: 992px) {
           .hero-badge-container {
             display: none !important;
           }
         }
+
+        /* Floating destination card animation */
         @keyframes heroFloat {
           0%, 100% { transform: rotate(2deg) translateY(-20px); }
           50%       { transform: rotate(1.5deg) translateY(-34px); }
         }
         .hero-floating-card {
           animation: heroFloat 5s ease-in-out infinite;
+        }
+
+        /* ── Search Widget — Desktop ─────────────────────────────── */
+        .search-form {
+          display: grid;
+          grid-template-columns: 1fr 1fr 1fr 1fr 160px;
+          gap: 16px;
+          align-items: end;
+        }
+
+        /* ── Search Widget — Tablet (≤900px) ─────────────────────── */
+        @media (max-width: 900px) {
+          .search-form {
+            grid-template-columns: 1fr 1fr;
+          }
+          .search-submit-btn {
+            grid-column: 1 / -1;
+          }
+        }
+
+        /* ── Search Widget — Mobile (≤600px) ─────────────────────── */
+        @media (max-width: 600px) {
+          .search-widget {
+            padding: 16px !important;
+            margin-top: 32px !important;
+            border-radius: 16px !important;
+          }
+          .search-form {
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+          }
+          .search-submit-btn {
+            grid-column: 1 / -1;
+            height: 52px !important;
+            font-size: 1rem !important;
+          }
+
+          /* Tabs: 4 equal pills in 2x2 layout */
+          .search-tabs {
+            display: grid !important;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px !important;
+            margin-bottom: 16px !important;
+          }
+          .search-tab-btn {
+            padding: 10px 8px !important;
+            font-size: 0.82rem !important;
+            border-radius: 10px !important;
+            border: 1.5px solid rgba(0,0,0,0.06) !important;
+            background: rgba(255,255,255,0.6) !important;
+          }
+          .search-tab-active {
+            background: rgba(14,165,233,0.12) !important;
+            border-color: rgba(14,165,233,0.3) !important;
+          }
+        }
+
+        /* ── Search Widget — Very small (≤400px) ─────────────────── */
+        @media (max-width: 400px) {
+          .search-form {
+            grid-template-columns: 1fr;
+          }
+          .search-tab-label {
+            display: none;
+          }
+          .search-tab-btn {
+            font-size: 1.3rem !important;
+            padding: 10px !important;
+            justify-content: center !important;
+          }
         }
       `}</style>
     </header>
