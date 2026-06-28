@@ -161,16 +161,16 @@ export default function Destinations({ activeTab: propActiveTab, setActiveTab: p
               style={{
                 padding: '10px 24px',
                 borderRadius: 'var(--radius-full)',
-                border: tab === cat.id ? '2px solid rgb(var(--secondary-rgb))' : '2px solid rgba(0,0,0,0.06)',
-                background: tab === cat.id ? 'rgba(14, 165, 233, 0.08)' : 'white',
-                color: tab === cat.id ? 'rgb(var(--secondary-rgb))' : 'var(--text-muted)',
+                border: tab === cat.id ? '1.5px solid rgb(var(--secondary-rgb))' : '1.5px solid rgba(255, 255, 255, 0.08)',
+                background: tab === cat.id ? 'rgba(14, 165, 233, 0.15)' : 'rgba(255, 255, 255, 0.04)',
+                color: tab === cat.id ? '#ffffff' : 'rgba(255, 255, 255, 0.6)',
                 fontWeight: 700,
                 fontSize: '0.9rem',
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
                 gap: '8px',
-                boxShadow: tab === cat.id ? '0 4px 12px rgba(14, 165, 233, 0.15)' : 'var(--shadow-sm)',
+                boxShadow: tab === cat.id ? '0 4px 12px rgba(14, 165, 233, 0.25)' : 'none',
                 transition: 'all 0.25s ease'
               }}
             >
@@ -345,10 +345,10 @@ export default function Destinations({ activeTab: propActiveTab, setActiveTab: p
                     {displayPkg.type === 'package' && (
                       <div style={{ 
                         marginTop: '10px',
-                        background: '#f8fafc',
+                        background: 'rgba(255, 255, 255, 0.03)',
                         padding: '12px 16px',
                         borderRadius: 'var(--radius-md)',
-                        border: '1px solid #e2e8f0',
+                        border: '1px solid rgba(255, 255, 255, 0.08)',
                         display: 'flex',
                         flexDirection: 'column',
                         gap: '6px'

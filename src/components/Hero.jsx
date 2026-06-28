@@ -5,12 +5,7 @@ export default function Hero({ activeTab: propActiveTab, setActiveTab: propSetAc
   const [localActiveTab, setLocalActiveTab] = useState('tours');
   const activeTab = propActiveTab || localActiveTab;
   const setActiveTab = propSetActiveTab || setLocalActiveTab;
-  const [formData, setFormData] = useState({
-    origin: 'Ciudad de México (MEX)',
-    destination: 'Tokio (NRT)',
-    departure: '2026-10-12',
-    passengers: '2 Adultos'
-  });
+
   
   const [packages, setPackages] = useState([]);
   const [currentPkgIndex, setCurrentPkgIndex] = useState(0);
@@ -50,13 +45,7 @@ export default function Hero({ activeTab: propActiveTab, setActiveTab: propSetAc
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const handleSearch = (e) => {
-    e.preventDefault();
-    const destinationsSection = document.getElementById('destinos');
-    if (destinationsSection) {
-      destinationsSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+
 
   return (
     <header ref={heroRef} id="inicio" style={{
@@ -264,156 +253,6 @@ export default function Hero({ activeTab: propActiveTab, setActiveTab: propSetAc
           </div>
         </div>
 
-        {/* BOTTOM: FLOATING SEARCH WIDGET */}
-        <div className="glass animate-fade-in-up search-widget" style={{
-          marginTop: '64px',
-          borderRadius: 'var(--radius-xl)',
-          padding: '24px',
-          border: '1px solid rgba(255, 255, 255, 0.25)',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-          color: 'var(--text-main)'
-        }}>
-          {/* Tab Selector */}
-          <div className="search-tabs" style={{
-            display: 'flex',
-            gap: '6px',
-            marginBottom: '20px',
-            borderBottom: '1px solid rgba(0,0,0,0.06)',
-            paddingBottom: '12px',
-            flexWrap: 'wrap'
-          }}>
-            {[
-              { id: 'flights', label: 'Vuelos',         icon: 'fi fi-rr-plane-alt' },
-              { id: 'hotels',  label: 'Hoteles',        icon: 'fi fi-rs-hotel' },
-              { id: 'tours',   label: 'Tours',          icon: 'fi fi-rs-map' },
-              { id: 'cars',    label: 'Autos',          icon: 'fi fi-rs-car-side' },
-            ].map(tab => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`search-tab-btn${activeTab === tab.id ? ' search-tab-active' : ''}`}
-                style={{
-                  background: activeTab === tab.id ? 'rgba(14, 165, 233, 0.12)' : 'transparent',
-                  border: activeTab === tab.id ? '1.5px solid rgba(14,165,233,0.25)' : '1.5px solid transparent',
-                  outline: 'none',
-                  padding: '8px 16px',
-                  borderRadius: 'var(--radius-sm)',
-                  cursor: 'pointer',
-                  fontWeight: 600,
-                  fontSize: '0.88rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '8px',
-                  color: activeTab === tab.id ? 'rgb(var(--secondary-rgb))' : 'var(--text-muted)',
-                  transition: 'var(--transition-fast)',
-                  whiteSpace: 'nowrap',
-                  flex: '1 1 auto',
-                  justifyContent: 'center',
-                  minWidth: '0'
-                }}
-              >
-                <i className={tab.icon} style={{ fontSize: '1rem', display: 'flex', alignItems: 'center' }}></i>
-                <span className="search-tab-label">{tab.label}</span>
-              </button>
-            ))}
-          </div>
-
-          {/* Search Fields Form */}
-          <form onSubmit={handleSearch} className="search-form">
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <label style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)' }}>Origen</label>
-              <input 
-                type="text" 
-                value={formData.origin}
-                onChange={(e) => setFormData({...formData, origin: e.target.value})}
-                style={{
-                  padding: '12px 14px',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1.5px solid rgba(255, 255, 255, 0.1)',
-                  background: 'rgba(15, 23, 42, 0.65)',
-                  color: 'white',
-                  fontSize: '0.95rem',
-                  fontWeight: 500,
-                  outline: 'none',
-                  width: '100%'
-                }}
-              />
-            </div>
-            
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <label style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)' }}>Destino</label>
-              <input 
-                type="text" 
-                value={formData.destination}
-                onChange={(e) => setFormData({...formData, destination: e.target.value})}
-                style={{
-                  padding: '12px 14px',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1.5px solid rgba(255, 255, 255, 0.1)',
-                  background: 'rgba(15, 23, 42, 0.65)',
-                  color: 'white',
-                  fontSize: '0.95rem',
-                  fontWeight: 500,
-                  outline: 'none',
-                  width: '100%'
-                }}
-              />
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <label style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)' }}>Fecha Salida</label>
-              <input 
-                type="date" 
-                value={formData.departure}
-                onChange={(e) => setFormData({...formData, departure: e.target.value})}
-                style={{
-                  padding: '12px 14px',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1.5px solid rgba(255, 255, 255, 0.1)',
-                  background: 'rgba(15, 23, 42, 0.65)',
-                  color: 'white',
-                  fontSize: '0.95rem',
-                  fontWeight: 500,
-                  outline: 'none',
-                  width: '100%'
-                }}
-              />
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
-              <label style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--text-muted)' }}>Pasajeros</label>
-              <select 
-                value={formData.passengers}
-                onChange={(e) => setFormData({...formData, passengers: e.target.value})}
-                style={{
-                  padding: '12px 14px',
-                  borderRadius: 'var(--radius-md)',
-                  border: '1.5px solid rgba(255, 255, 255, 0.1)',
-                  background: 'rgba(15, 23, 42, 0.65)',
-                  color: 'white',
-                  fontSize: '0.95rem',
-                  fontWeight: 500,
-                  outline: 'none',
-                  appearance: 'none',
-                  width: '100%',
-                  backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
-                  backgroundRepeat: 'no-repeat',
-                  backgroundPosition: 'right 14px center',
-                  backgroundSize: '16px'
-                }}
-              >
-                <option style={{ background: '#0a0f1d', color: 'white' }}>1 Adulto</option>
-                <option style={{ background: '#0a0f1d', color: 'white' }}>2 Adultos</option>
-                <option style={{ background: '#0a0f1d', color: 'white' }}>2 Adultos, 1 Niño</option>
-                <option style={{ background: '#0a0f1d', color: 'white' }}>4 Adultos</option>
-              </select>
-            </div>
-
-            <button type="submit" className="btn btn-primary search-submit-btn" style={{ padding: '14px', borderRadius: 'var(--radius-md)', width: '100%', height: '48px' }}>
-              Buscar Paquete
-            </button>
-          </form>
-        </div>
 
       </div>
 
@@ -434,75 +273,6 @@ export default function Hero({ activeTab: propActiveTab, setActiveTab: propSetAc
           animation: heroFloat 5s ease-in-out infinite;
         }
 
-        /* ── Search Widget — Desktop ─────────────────────────────── */
-        .search-form {
-          display: grid;
-          grid-template-columns: 1fr 1fr 1fr 1fr 160px;
-          gap: 16px;
-          align-items: end;
-        }
-
-        /* ── Search Widget — Tablet (≤900px) ─────────────────────── */
-        @media (max-width: 900px) {
-          .search-form {
-            grid-template-columns: 1fr 1fr;
-          }
-          .search-submit-btn {
-            grid-column: 1 / -1;
-          }
-        }
-
-        /* ── Search Widget — Mobile (≤600px) ─────────────────────── */
-        @media (max-width: 600px) {
-          .search-widget {
-            padding: 16px !important;
-            margin-top: 32px !important;
-            border-radius: 16px !important;
-          }
-          .search-form {
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-          }
-          .search-submit-btn {
-            grid-column: 1 / -1;
-            height: 52px !important;
-            font-size: 1rem !important;
-          }
-
-          /* Tabs: 4 equal pills in 2x2 layout */
-          .search-tabs {
-            display: grid !important;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px !important;
-            margin-bottom: 16px !important;
-          }
-          .search-tab-btn {
-            padding: 10px 8px !important;
-            font-size: 0.82rem !important;
-            border-radius: 10px !important;
-            border: 1.5px solid rgba(0,0,0,0.06) !important;
-            background: rgba(255,255,255,0.6) !important;
-          }
-          .search-tab-active {
-            background: rgba(14,165,233,0.12) !important;
-            border-color: rgba(14,165,233,0.3) !important;
-          }
-        }
-
-        /* ── Search Widget — Very small (≤400px) ─────────────────── */
-        @media (max-width: 400px) {
-          .search-form {
-            grid-template-columns: 1fr;
-          }
-          .search-tab-label {
-            display: none;
-          }
-          .search-tab-btn {
-            font-size: 1.3rem !important;
-            padding: 10px !important;
-            justify-content: center !important;
-          }
-        }
       `}</style>
     </header>
   );
