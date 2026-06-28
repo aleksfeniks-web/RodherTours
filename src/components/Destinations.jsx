@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ScrollReveal from './ScrollReveal';
 import { useStaggeredReveal } from '../hooks/useScrollReveal';
 import { getItems } from '../firebaseService';
+import ItineraryViewer from './ItineraryViewer';
 
 const STATIC_PACKAGES = [
   {
@@ -69,6 +70,7 @@ export default function Destinations({ activeTab: propActiveTab, setActiveTab: p
 
   const [items, setItems] = useState(STATIC_PACKAGES);
   const [loading, setLoading] = useState(false);
+  const [selectedItinerary, setSelectedItinerary] = useState(null);
 
   useEffect(() => {
     const loadData = async () => {
@@ -103,8 +105,8 @@ export default function Destinations({ activeTab: propActiveTab, setActiveTab: p
     <section id="destinos" style={{
       padding: '100px 0',
       backgroundColor: 'var(--bg-secondary)',
-      borderTop: '1px solid rgba(0,0,0,0.02)',
-      borderBottom: '1px solid rgba(0,0,0,0.02)'
+      borderTop: '1px solid rgba(255,255,255,0.02)',
+      borderBottom: '1px solid rgba(255,255,255,0.02)'
     }}>
       <div className="container">
         
@@ -122,7 +124,7 @@ export default function Destinations({ activeTab: propActiveTab, setActiveTab: p
             <h2 style={{
               fontSize: '2.5rem',
               fontWeight: 800,
-              color: 'var(--dark-bg)',
+              color: '#ffffff',
               letterSpacing: '-1px'
             }}>
               {tab === 'flights' ? 'Vuelos Disponibles' : tab === 'hotels' ? 'Hoteles Exclusivos' : tab === 'cars' ? 'Autos en Renta' : 'Destinos Populares de Temporada'}
@@ -254,13 +256,13 @@ export default function Destinations({ activeTab: propActiveTab, setActiveTab: p
                   key={item.id || index} 
                   className="destination-card"
                   style={getItemStyle(index, {
-                    background: 'white',
+                    background: 'rgba(15, 23, 42, 0.45)',
                     borderRadius: 'var(--radius-lg)',
                     overflow: 'hidden',
                     boxShadow: 'var(--shadow-md)',
                     display: 'flex',
                     flexDirection: 'column',
-                    border: '1px solid rgba(0,0,0,0.04)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
                     position: 'relative'
                   })}
                 >
@@ -332,7 +334,7 @@ export default function Destinations({ activeTab: propActiveTab, setActiveTab: p
                       </span>
                     </div>
 
-                    <h3 style={{ fontSize: '1.4rem', color: 'var(--dark-bg)', fontWeight: 700 }}>
+                    <h3 style={{ fontSize: '1.4rem', color: '#ffffff', fontWeight: 700 }}>
                       {displayPkg.name}
                     </h3>
 
@@ -390,7 +392,7 @@ export default function Destinations({ activeTab: propActiveTab, setActiveTab: p
                         <span style={{ fontSize: '0.8rem', color: 'var(--text-light)', textTransform: 'uppercase', fontWeight: 600 }}>
                           {displayPkg.type === 'flight' ? 'Costo Vuelo' : displayPkg.type === 'hotel' ? 'Costo Estadía' : displayPkg.type === 'car' ? 'Costo Renta' : 'Costo Total'}
                         </span>
-                        <span style={{ fontSize: '1.4rem', fontWeight: 800, color: 'var(--dark-bg)' }}>
+                        <span style={{ fontSize: '1.4rem', fontWeight: 800, color: '#ffffff' }}>
                           ${displayPkg.price.toLocaleString()} <span style={{ fontSize: '0.85rem', color: 'var(--text-muted)', fontWeight: 500 }}>USD</span>
                         </span>
                       </div>
@@ -404,31 +406,13 @@ export default function Destinations({ activeTab: propActiveTab, setActiveTab: p
                     </div>
 
                     {displayPkg.type === 'package' ? (
-                      <div style={{ display: 'flex', gap: '10px', marginTop: '8px' }}>
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px' }}>
                         <button 
-                          onClick={() => onSelectDestination(displayPkg)}
-                          className="btn btn-accent" 
+                          onClick={() => setSelectedItinerary(displayPkg)}
+                          className="btn btn-secondary" 
                           style={{
-                            flex: 1,
-                            padding: '12px 8px',
-                            borderRadius: 'var(--radius-md)',
-                            fontSize: '0.88rem',
-                            fontWeight: 700,
-                            whiteSpace: 'nowrap'
-                          }}
-                        >
-                          Apartar Lugar
-                        </button>
-                        <a 
-                          href={`https://wa.me/525587654321?text=${encodeURIComponent(`Hola, me interesa cotizar el tour a ${displayPkg.name} (${displayPkg.country}). ¿Me podrían brindar más información? 😊`)}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="btn"
-                          style={{
-                            flex: 1,
-                            background: '#25D366',
-                            color: 'white',
-                            padding: '12px 8px',
+                            width: '100%',
+                            padding: '10px',
                             borderRadius: 'var(--radius-md)',
                             fontSize: '0.88rem',
                             fontWeight: 700,
@@ -436,17 +420,57 @@ export default function Destinations({ activeTab: propActiveTab, setActiveTab: p
                             alignItems: 'center',
                             justifyContent: 'center',
                             gap: '6px',
-                            boxShadow: '0 4px 10px rgba(37, 211, 102, 0.25)',
-                            textDecoration: 'none',
-                            whiteSpace: 'nowrap',
-                            transition: 'var(--transition-fast)'
+                            background: 'rgba(14, 165, 233, 0.12)',
+                            border: '1px solid rgba(14, 165, 233, 0.25)',
+                            color: '#38bdf8'
                           }}
                         >
-                          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
-                            <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.316 1.592 5.43 0 9.849-4.417 9.851-9.85.002-5.43-4.415-9.849-9.851-9.849-5.431 0-9.85 4.417-9.852 9.85-.001 1.954.512 3.86 1.488 5.567l-.999 3.647 3.747-.981zm12.006-7.531c-.328-.164-1.942-.959-2.242-1.069-.3-.11-.518-.165-.736.164-.219.328-.847 1.069-1.037 1.288-.19.219-.38.246-.708.082-.328-.164-1.386-.511-2.64-1.629-.976-.87-1.635-1.946-1.826-2.274-.19-.328-.02-.505.144-.668.148-.147.328-.383.493-.574.164-.191.219-.328.328-.546.11-.219.055-.41-.027-.574-.082-.164-.736-1.777-1.009-2.433-.267-.641-.539-.553-.736-.563-.19-.01-.409-.012-.628-.012-.218 0-.573.082-.873.41-.3.328-1.147 1.12-1.147 2.732 0 1.612 1.174 3.17 1.338 3.389.164.218 2.312 3.53 5.599 4.95 1.666.721 2.502.936 3.424.811.895-.121 2.766-1.131 3.153-2.227.387-1.096.387-2.031.272-2.227-.113-.195-.411-.304-.739-.469z"/>
-                          </svg>
-                          Cotizar
-                        </a>
+                          🗺️ Ver Itinerario y Mapa
+                        </button>
+                        <div style={{ display: 'flex', gap: '8px' }}>
+                          <button 
+                            onClick={() => onSelectDestination(displayPkg)}
+                            className="btn btn-accent" 
+                            style={{
+                              flex: 1,
+                              padding: '10px 6px',
+                              borderRadius: 'var(--radius-md)',
+                              fontSize: '0.82rem',
+                              fontWeight: 700,
+                              whiteSpace: 'nowrap'
+                            }}
+                          >
+                            Apartar Lugar
+                          </button>
+                          <a 
+                            href={`https://wa.me/525587654321?text=${encodeURIComponent(`Hola, me interesa cotizar el tour a ${displayPkg.name} (${displayPkg.country}). ¿Me podrían brindar más información? 😊`)}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="btn"
+                            style={{
+                              flex: 1,
+                              background: '#25D366',
+                              color: 'white',
+                              padding: '10px 6px',
+                              borderRadius: 'var(--radius-md)',
+                              fontSize: '0.82rem',
+                              fontWeight: 700,
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              gap: '4px',
+                              boxShadow: '0 4px 10px rgba(37, 211, 102, 0.25)',
+                              textDecoration: 'none',
+                              whiteSpace: 'nowrap',
+                              transition: 'var(--transition-fast)'
+                            }}
+                          >
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" style={{ flexShrink: 0 }}>
+                              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.316 1.592 5.43 0 9.849-4.417 9.851-9.85.002-5.43-4.415-9.849-9.851-9.849-5.431 0-9.85 4.417-9.852 9.85-.001 1.954.512 3.86 1.488 5.567l-.999 3.647 3.747-.981zm12.006-7.531c-.328-.164-1.942-.959-2.242-1.069-.3-.11-.518-.165-.736.164-.219.328-.847 1.069-1.037 1.288-.19.219-.38.246-.708.082-.328-.164-1.386-.511-2.64-1.629-.976-.87-1.635-1.946-1.826-2.274-.19-.328-.02-.505.144-.668.148-.147.328-.383.493-.574.164-.191.219-.328.328-.546.11-.219.055-.41-.027-.574-.082-.164-.736-1.777-1.009-2.433-.267-.641-.539-.553-.736-.563-.19-.01-.409-.012-.628-.012-.218 0-.573.082-.873.41-.3.328-1.147 1.12-1.147 2.732 0 1.612 1.174 3.17 1.338 3.389.164.218 2.312 3.53 5.599 4.95 1.666.721 2.502.936 3.424.811.895-.121 2.766-1.131 3.153-2.227.387-1.096.387-2.031.272-2.227-.113-.195-.411-.304-.739-.469z"/>
+                            </svg>
+                            Cotizar
+                          </a>
+                        </div>
                       </div>
                     ) : (
                       <button 
@@ -472,6 +496,19 @@ export default function Destinations({ activeTab: propActiveTab, setActiveTab: p
 
       </div>
 
+      {/* Itinerary Timeline Viewer Modal */}
+      {selectedItinerary && (
+        <ItineraryViewer
+          destination={selectedItinerary}
+          onClose={() => setSelectedItinerary(null)}
+          onBook={() => {
+            const pkgToBook = selectedItinerary;
+            setSelectedItinerary(null);
+            onSelectDestination(pkgToBook);
+          }}
+        />
+      )}
+
       {styleHook}
     </section>
   );
@@ -480,10 +517,14 @@ export default function Destinations({ activeTab: propActiveTab, setActiveTab: p
 // Hover styles injected via style element inside React
 const styleHook = (
   <style>{`
+    .destination-card {
+      transition: var(--transition-normal);
+    }
     .destination-card:hover {
       transform: translateY(-8px);
+      background: rgba(15, 23, 42, 0.65) !important;
       box-shadow: var(--shadow-xl) !important;
-      border-color: rgba(var(--secondary-rgb), 0.15) !important;
+      border-color: rgba(var(--secondary-rgb), 0.25) !important;
     }
     .destination-card:hover .card-image {
       transform: scale(1.06);

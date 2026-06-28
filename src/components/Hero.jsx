@@ -65,22 +65,34 @@ export default function Hero({ activeTab: propActiveTab, setActiveTab: propSetAc
       paddingTop: '100px',
       display: 'flex',
       alignItems: 'center',
-      backgroundImage: `linear-gradient(to bottom, rgba(10, 25, 47, 0.4), rgba(10, 25, 47, 0.85)), url('/images/bali.png')`,
+      backgroundImage: `linear-gradient(to bottom, rgba(3, 7, 18, 0.4), rgba(3, 7, 18, 0.9)), url('/images/bali.png')`,
       backgroundSize: 'cover',
       backgroundPosition: `center ${bgOffset}px`,
       backgroundRepeat: 'no-repeat',
       color: 'white',
       overflow: 'hidden'
     }}>
-      {/* Dynamic Background Blob / Ambient Glow */}
+      {/* Dynamic Background Blobs / Ambient Glow */}
       <div style={{
         position: 'absolute',
         top: '20%',
         right: '-10%',
         width: '500px',
         height: '500px',
-        background: 'rgba(14, 165, 233, 0.25)',
+        background: 'rgba(14, 165, 233, 0.22)',
         filter: 'blur(120px)',
+        borderRadius: '50%',
+        zIndex: 1,
+        pointerEvents: 'none'
+      }}></div>
+      <div style={{
+        position: 'absolute',
+        bottom: '10%',
+        left: '-10%',
+        width: '450px',
+        height: '450px',
+        background: 'rgba(139, 92, 246, 0.18)',
+        filter: 'blur(100px)',
         borderRadius: '50%',
         zIndex: 1,
         pointerEvents: 'none'
@@ -317,8 +329,9 @@ export default function Hero({ activeTab: propActiveTab, setActiveTab: propSetAc
                 style={{
                   padding: '12px 14px',
                   borderRadius: 'var(--radius-md)',
-                  border: '1.5px solid rgba(0,0,0,0.08)',
-                  background: 'white',
+                  border: '1.5px solid rgba(255, 255, 255, 0.1)',
+                  background: 'rgba(15, 23, 42, 0.65)',
+                  color: 'white',
                   fontSize: '0.95rem',
                   fontWeight: 500,
                   outline: 'none',
@@ -336,8 +349,9 @@ export default function Hero({ activeTab: propActiveTab, setActiveTab: propSetAc
                 style={{
                   padding: '12px 14px',
                   borderRadius: 'var(--radius-md)',
-                  border: '1.5px solid rgba(0,0,0,0.08)',
-                  background: 'white',
+                  border: '1.5px solid rgba(255, 255, 255, 0.1)',
+                  background: 'rgba(15, 23, 42, 0.65)',
+                  color: 'white',
                   fontSize: '0.95rem',
                   fontWeight: 500,
                   outline: 'none',
@@ -355,8 +369,9 @@ export default function Hero({ activeTab: propActiveTab, setActiveTab: propSetAc
                 style={{
                   padding: '12px 14px',
                   borderRadius: 'var(--radius-md)',
-                  border: '1.5px solid rgba(0,0,0,0.08)',
-                  background: 'white',
+                  border: '1.5px solid rgba(255, 255, 255, 0.1)',
+                  background: 'rgba(15, 23, 42, 0.65)',
+                  color: 'white',
                   fontSize: '0.95rem',
                   fontWeight: 500,
                   outline: 'none',
@@ -373,23 +388,24 @@ export default function Hero({ activeTab: propActiveTab, setActiveTab: propSetAc
                 style={{
                   padding: '12px 14px',
                   borderRadius: 'var(--radius-md)',
-                  border: '1.5px solid rgba(0,0,0,0.08)',
-                  background: 'white',
+                  border: '1.5px solid rgba(255, 255, 255, 0.1)',
+                  background: 'rgba(15, 23, 42, 0.65)',
+                  color: 'white',
                   fontSize: '0.95rem',
                   fontWeight: 500,
                   outline: 'none',
                   appearance: 'none',
                   width: '100%',
-                  backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
+                  backgroundImage: `url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e")`,
                   backgroundRepeat: 'no-repeat',
                   backgroundPosition: 'right 14px center',
                   backgroundSize: '16px'
                 }}
               >
-                <option>1 Adulto</option>
-                <option>2 Adultos</option>
-                <option>2 Adultos, 1 Niño</option>
-                <option>4 Adultos</option>
+                <option style={{ background: '#0a0f1d', color: 'white' }}>1 Adulto</option>
+                <option style={{ background: '#0a0f1d', color: 'white' }}>2 Adultos</option>
+                <option style={{ background: '#0a0f1d', color: 'white' }}>2 Adultos, 1 Niño</option>
+                <option style={{ background: '#0a0f1d', color: 'white' }}>4 Adultos</option>
               </select>
             </div>
 

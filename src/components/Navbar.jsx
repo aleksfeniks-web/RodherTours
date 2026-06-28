@@ -24,19 +24,19 @@ export default function Navbar({ onOpenAdmin }) {
           <div style={{ width: '48px', height: '48px' }}>
             <svg viewBox="0 0 500 500" width="100%" height="100%">
               {/* Outer Seal Circle */}
-              <circle cx="250" cy="220" r="190" fill="none" stroke="#0a192f" strokeWidth="12" />
+              <circle cx="250" cy="220" r="190" fill="none" stroke="#ffffff" strokeWidth="12" />
               
               {/* Sun */}
               <circle cx="230" cy="180" r="75" fill="#f59e0b" />
               
               {/* Birds */}
-              <path d="M 205,125 Q 210,120 215,125 Q 220,120 225,125" stroke="#0f172a" strokeWidth="4" fill="none" strokeLinecap="round" />
-              <path d="M 235,140 Q 238,136 242,140 Q 246,136 250,140" stroke="#0f172a" strokeWidth="4" fill="none" strokeLinecap="round" />
+              <path d="M 205,125 Q 210,120 215,125 Q 220,120 225,125" stroke="#ffffff" strokeWidth="4" fill="none" strokeLinecap="round" />
+              <path d="M 235,140 Q 238,136 242,140 Q 246,136 250,140" stroke="#ffffff" strokeWidth="4" fill="none" strokeLinecap="round" />
 
               {/* Mountains */}
-              <polygon points="170,270 260,150 350,270" fill="#0f172a" />
-              <polygon points="260,270 320,185 380,270" fill="#1e293b" />
-              <polygon points="210,270 260,200 310,270" fill="#334155" opacity="0.8" />
+              <polygon points="170,270 260,150 350,270" fill="#ffffff" />
+              <polygon points="260,270 320,185 380,270" fill="#38bdf8" />
+              <polygon points="210,270 260,200 310,270" fill="#0ea5e9" opacity="0.8" />
               
               {/* Sea / Waves */}
               <path d="M 100,270 Q 250,310 400,270 Q 300,360 250,360 Q 200,360 100,270 Z" fill="#0ea5e9" />
@@ -44,30 +44,30 @@ export default function Navbar({ onOpenAdmin }) {
               
               {/* Palm Trees */}
               {/* Left Palm */}
-              <path d="M 135,280 Q 145,225 155,185" stroke="#0f172a" strokeWidth="8" fill="none" strokeLinecap="round" />
-              <path d="M 155,185 Q 135,175 115,190" stroke="#0f172a" strokeWidth="5" fill="none" strokeLinecap="round" />
-              <path d="M 155,185 Q 145,160 130,155" stroke="#0f172a" strokeWidth="5" fill="none" strokeLinecap="round" />
-              <path d="M 155,185 Q 165,160 180,155" stroke="#0f172a" strokeWidth="5" fill="none" strokeLinecap="round" />
-              <path d="M 155,185 Q 175,175 195,190" stroke="#0f172a" strokeWidth="5" fill="none" strokeLinecap="round" />
+              <path d="M 135,280 Q 145,225 155,185" stroke="#ffffff" strokeWidth="8" fill="none" strokeLinecap="round" />
+              <path d="M 155,185 Q 135,175 115,190" stroke="#ffffff" strokeWidth="5" fill="none" strokeLinecap="round" />
+              <path d="M 155,185 Q 145,160 130,155" stroke="#ffffff" strokeWidth="5" fill="none" strokeLinecap="round" />
+              <path d="M 155,185 Q 165,160 180,155" stroke="#ffffff" strokeWidth="5" fill="none" strokeLinecap="round" />
+              <path d="M 155,185 Q 175,175 195,190" stroke="#ffffff" strokeWidth="5" fill="none" strokeLinecap="round" />
               {/* Smaller Left Palm */}
-              <path d="M 160,285 Q 165,245 172,215" stroke="#1e293b" strokeWidth="6" fill="none" strokeLinecap="round" />
-              <path d="M 172,215 Q 155,208 140,220" stroke="#1e293b" strokeWidth="4" fill="none" strokeLinecap="round" />
-              <path d="M 172,215 Q 165,195 152,190" stroke="#1e293b" strokeWidth="4" fill="none" strokeLinecap="round" />
-              <path d="M 172,215 Q 180,195 192,190" stroke="#1e293b" strokeWidth="4" fill="none" strokeLinecap="round" />
-              <path d="M 172,215 Q 188,208 205,220" stroke="#1e293b" strokeWidth="4" fill="none" strokeLinecap="round" />
+              <path d="M 160,285 Q 165,245 172,215" stroke="#38bdf8" strokeWidth="6" fill="none" strokeLinecap="round" />
+              <path d="M 172,215 Q 155,208 140,220" stroke="#38bdf8" strokeWidth="4" fill="none" strokeLinecap="round" />
+              <path d="M 172,215 Q 165,195 152,190" stroke="#38bdf8" strokeWidth="4" fill="none" strokeLinecap="round" />
+              <path d="M 172,215 Q 180,195 192,190" stroke="#38bdf8" strokeWidth="4" fill="none" strokeLinecap="round" />
+              <path d="M 172,215 Q 188,208 205,220" stroke="#38bdf8" strokeWidth="4" fill="none" strokeLinecap="round" />
 
               {/* Airplane & Trail */}
               <path d="M 100,310 C 170,305 210,240 330,135" fill="none" stroke="#ffffff" strokeWidth="12" strokeLinecap="round" />
-              <path d="M 100,310 C 170,305 210,240 330,135" fill="none" stroke="#0a192f" strokeWidth="4" strokeDasharray="10 8" />
+              <path d="M 100,310 C 170,305 210,240 330,135" fill="none" stroke="#030712" strokeWidth="4" strokeDasharray="10 8" />
               
               <g transform="translate(320, 130) rotate(-38) scale(0.95)">
                 {/* Wings */}
                 <polygon points="15,0 -10,40 -20,40 -8,0" fill="#0ea5e9" />
                 <polygon points="15,-6 -10,-46 -20,-46 -8,-6" fill="#0ea5e9" />
                 {/* Tail */}
-                <polygon points="-35,5 -45,18 -49,18 -42,0 -49,-18 -45,-18 -35,-5" fill="#0a192f" />
+                <polygon points="-35,5 -45,18 -49,18 -42,0 -49,-18 -45,-18 -35,-5" fill="#ffffff" />
                 {/* Fuselage */}
-                <ellipse cx="-10" cy="0" rx="42" ry="11" fill="#0a192f" />
+                <ellipse cx="-10" cy="0" rx="42" ry="11" fill="#ffffff" />
                 {/* Nose Cone */}
                 <ellipse cx="25" cy="0" rx="10" ry="7" fill="#0ea5e9" />
               </g>
@@ -78,7 +78,7 @@ export default function Navbar({ onOpenAdmin }) {
               fontFamily: 'var(--font-headings)',
               fontWeight: 800,
               fontSize: '1.4rem',
-              color: 'var(--dark-bg)',
+              color: '#ffffff',
               lineHeight: 1.1,
               letterSpacing: '-0.5px'
             }}>

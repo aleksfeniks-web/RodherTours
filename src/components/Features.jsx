@@ -88,7 +88,7 @@ export default function Features() {
                 padding: '32px 24px',
                 borderRadius: 'var(--radius-lg)',
                 backgroundColor: 'var(--bg-primary)',
-                border: '1px solid rgba(0,0,0,0.03)',
+                border: '1px solid rgba(255, 255, 255, 0.05)',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '16px',
@@ -110,7 +110,7 @@ export default function Features() {
               <h3 style={{
                 fontSize: '1.15rem',
                 fontWeight: 700,
-                color: 'var(--dark-bg)'
+                color: '#ffffff'
               }}>
                 {feature.title}
               </h3>
@@ -129,11 +129,14 @@ export default function Features() {
       </div>
 
       <style>{`
+        .feature-card {
+          transition: var(--transition-normal);
+        }
         .feature-card:hover {
           transform: translateY(-6px);
           box-shadow: var(--shadow-lg);
-          border-color: rgba(var(--secondary-rgb), 0.1) !important;
-          background-color: #ffffff !important;
+          border-color: rgba(var(--secondary-rgb), 0.2) !important;
+          background-color: rgba(15, 23, 42, 0.75) !important;
         }
       `}</style>
     </section>
